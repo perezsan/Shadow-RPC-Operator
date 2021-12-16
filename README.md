@@ -16,6 +16,10 @@ For users that feel confident in their knowledge of linux systems, we also provi
 
 We encourage all Shadow Operators to at the very least read through the step 1-3 guide to become familiar with what the script installer will do. Otherwise if your machines breaks you may not be able to fix it before the penalties and reward slashing kick in.
 
+System requirements:
+You must be running Ubuntu 20.04
+Solana Server Program Machine - via Equinix.
+
 # Other Resources & Learning
 Official Solana RPC resources to reference are located in the Solans Documentation here: https://docs.solana.com/running-validator
 

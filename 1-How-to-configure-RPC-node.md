@@ -1,7 +1,8 @@
 # RPC Node config for Equinix Metal
 
-IMPORTANT: This guide is specifically for Equinix Machines from the Solana Reserve pool accessed throught he Solana Foudnation Server Program. https://solana.foundation/server-program
+IMPORTANT: This guide is specifically for Equinix Machines from the Solana Reserve pool accessed through he Solana Foundation Server Program. https://solana.foundation/server-program
 
+You must be running Ubuntu 20.04
 
 So you have your shiny new beast of a server. Let's make it a Shadow Operator RPC.
 
@@ -22,9 +23,9 @@ su - sol
 
 ```
 Partition hard drive for RPC
-Partition NVME into 420gb (swap) and 3000gb (ledger)
+Partition NVME into 420gb (swap) and 3000gb (ledger and accounts)
 
-adding new process using GPT partition with gdisk for larger filessytems. Make larger 3.5 (or 3.8) TB drive an ext4 via gdisk then partition using fdisk as normal. You have to delete the original GPT in order to select partition 1 with fdisk
+adding new process using GPT partition with gdisk for larger filessytems. Make larger 3.5 (or 3.8) TB drive via gdisk then partition using fdisk as normal. You have to delete the original GPT in order to select partition 1 with fdisk
 
 Enter the "n" then hit enter
 Etner the "1" then hit enter...and so on
@@ -53,12 +54,21 @@ sudo mkdir /mt/
 
 sudo mkdir /mt/ledger
 
+sudo mkdir /mt/ledger/validator-ledger
+
+sudo mkdir /mt/solana-accounts
+
 sudo mkdir ~/log
 ```
 Discover the swap directory, turn it off, make a new one and turn it on
 ```
 sudo swapon --show
 
+```
+You need to look at the directory and pick the correct /dev/sd*
+
+It could be /dev/sdb2 or /dev/sdc2 so edit the next line below to the proper sd**
+```
 sudo swapoff /dev/sda2
 
 sudo sed --in-place '/swap.img/d' /etc/fstab
@@ -77,7 +87,7 @@ sudo chmod 600 /mnt/swapfile
 
 sudo mkswap /mnt/swapfile
 
-echo 'vm.swappiness=1' | sudo tee --append /etc/sysctl.conf > /dev/null
+echo 'vm.swappiness=30' | sudo tee --append /etc/sysctl.conf > /dev/null
 
 sudo sysctl -p
 
@@ -112,20 +122,10 @@ UUID=87645b08-85c2-4fe2-9974-1bda4de317d9 /mnt  auto nosuid,nodev,nofail 0 0
 save / exit
 ctrl+s, ctrl+x
 
-But Wait - what was that ramdrive and tmpfs stuff? Leave it for now. That is an performance enhancement option that will be covered in later documentation. In short, it's for running the solana accounts inside the memory of the server verssu on the hard drive. More on this later.
+But Wait - what was that ramdrive and tmpfs stuff? Leave it for now. That is an performance enhancement option that will be covered in later documentation. In short, it's for running the solana-accounts inside the memory of the server versus on the hard drive. More on this later.
 
-now edit permissions and make sure directories are made again (i think the order of ops is a little off here since the reformating of GPT using fdisk whipes the secondary directories of ledger & ramdrive while keeping the mountpoints for the nvme of /mnt and /mt. easy enough to just remake directories though)
+now edit permissions and make sure user sol is the owner for solana directories
 ```
-sudo mkdir /mnt/ramdrive
-
-sudo mkdir /mt/ledger
-
-sudo mkdir /mt/ledger/validator-ledger
-
-sudo ls -ld /mt/ledger
-
-sudo mkdir /mt/solana-accounts
-
 sudo chown sol:sol /mt/solana-accounts
 
 sudo chown sol:sol /mt/ledger
@@ -133,11 +133,13 @@ sudo chown sol:sol /mt/ledger
 sudo chown sol:sol ~/log
 
 sudo chown sol:sol /mt/ledger/validator-ledger
-
+```
+mount everything
+```
 sudo mount --all --verbose
 ```
 
-firewall / ssh
+Set up the firewall / ssh
 ```
 sudo snap install ufw
 
@@ -151,7 +153,7 @@ sudo ufw allow 80;sudo ufw allow 80/udp;sudo ufw allow 80/tcp;sudo ufw allow 53;
 ```
 # Install Solana CLI! Don't forget to check for current version (1.8.10 as of 12/14/21)
 
-these are three seperate commands below:
+these are three separate commands below:
 
 ```
 sh -c "$(curl -sSfL https://release.solana.com/v1.8.10/install)"
@@ -164,9 +166,9 @@ if the machine is gossiping without any errors it can be spun up on the mainnet 
 
 exit gossip with ctrl + c
 
-create keys.
+now create keys.
 
-RPCs use throw away keys. These keys allow and RPC to be fully functional but do not need funds and do not need to be saved (because you can just make new ones if you need to ). You do not need to set a password for the keys. No need to copy seed phrases. You do not need a wallet-keypair if just RPC. 
+RPCs use throw away keys. These keys allow and RPC to be fully functional but do not need funds and do not need to be saved (because you can just make new ones if you need to ). You do not need to set a password for the keys. No need to copy seed phrases. You do not need a wallet-keypair if just RPC. **Do not move SOL into these wallets. This is not a validator**
 ```
 solana-keygen new -o ~/validator-keypair.json
 
@@ -176,9 +178,9 @@ solana-keygen new -o ~/vote-account-keypair.json
 ```
 making system services (sol.service and systuner.service) and the startup script.
 
-this is the solana-validator start up shell script which the system service (sol.service) will refernce
+this is the solana-validator start up shell script which the system service (sol.service) will reference
 ```
-sudo vim ~/start-validator.sh
+sudo nano ~/start-validator.sh
 ```
 dump this into start-validator.sh:
 
@@ -189,7 +191,6 @@ export SOLANA_METRICS_CONFIG=host=https://metrics.solana.com:8086,db=mainnet-bet
 PATH=/home/sol/.local/share/solana/install/active_release/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
 export RUST_BACKTRACE=1
 export RUST_LOG=solana=info,solana_core::rpc=debug
-export GOOGLE_APPLICATION_CREDENTIALS=/home/sol/solarchival-d87f0b4f3f3c.json
 exec solana-validator \
     --identity ~/validator-keypair.json \
     --entrypoint entrypoint.mainnet-beta.solana.com:8001 \
@@ -213,11 +214,11 @@ exec solana-validator \
     --no-voting \
     --private-rpc \
     --rpc-bind-address 0.0.0.0 \
-    --rpc-send-retry-ms 10 \
+    --rpc-send-retry-ms 100 \
     --enable-cpi-and-log-storage \
     --enable-rpc-transaction-history \
     --enable-rpc-bigtable-ledger-storage \
-    --rpc-bigtable-timeout 600 \
+    --rpc-bigtable-timeout 300 \
     --account-index program-id \
     --account-index spl-token-owner \
     --account-index spl-token-mint \
@@ -244,7 +245,7 @@ sudo chown sol:sol start-validator.sh
 ```
 create system service - sol.service (run on boot, auto-restart when sys fail) 
 ```
-sudo vim /etc/systemd/system/sol.service
+sudo nano /etc/systemd/system/sol.service
 ```
 dump this into file:
 ```
@@ -272,7 +273,7 @@ save/exit (:wq)
 
 make system tuner service - systuner.service
 ```
-sudo vim /etc/systemd/system/systuner.service
+sudo nano /etc/systemd/system/systuner.service
 ```
 dump this into file:
 ```
@@ -294,7 +295,7 @@ sudo systemctl daemon-reload
 ```
 log rotation for ~/log/solana-validator.log
 ```
-sudo vim /etc/logrotate.d/solana
+sudo nano /etc/logrotate.d/solana
 ```
 dump this into file:
 ```
@@ -323,7 +324,7 @@ sudo systemctl disable ondemand
 ```
 modifications to sysctl.conf
 ```
-sudo vim /etc/sysctl.conf
+sudo nano /etc/sysctl.conf
 ```
 edit into bottom of file
 
@@ -361,7 +362,7 @@ sudo systemctl enable --now sol.service
 
 sudo systemctl status sol.service
 ```
-or this (prefer the above the option to use bash is just for debugging)
+or this (prefer the above - the option to use bash is just for debugging)
 ```
 ./start-validator.sh
 ```
@@ -369,11 +370,13 @@ tail log to make sure it's fetching snapshot and working
 ```
 sudo tail -f ~/log/solana-validator.log
 ```
-The result should be the machine start tailing the validator log. It can take up to 20 minutes to download a snapshot and begin catching up. The catchup can take up to 45 minutes as well. You can run healthchecks to know when the machine is on the top of the cahin (healthy and ready to serve data) by using some of the below commands:
+The result should be the machine start tailing the validator log. It can take up to 20 minutes to download a snapshot and begin catching up. The catchup can take up to 45 minutes as well. You can run healthchecks to know when the machine is on the top of the chain (healthy and ready to serve data) by using some of the below commands:
 
 Healthcheck - you want this to return the work "Ok"
 
-If can also return a 'behind by x number of slots" which means it behind the "tip" of the chain by that many slots. Nodes can sometimes fall a little behind and that's normal. Anything above about 100 behind mean you will serve stale data.
+If can also return a 'behind by x number of slots" which means it behind the "tip" of the chain by that many slots. Nodes can sometimes fall a little behind and that's normal. Anything above about 100 behind mean you will risk serving stale data.
+
+It can take half an hour before this healthcheck reports slots. Prior it may just say "connection refused." That's normal, give the RPC time to download the data, index the data, and catch up to the top of the chain.
 ```
 curl http://localhost:8899 -k -X POST -H "Content-Type: application/json" -d '
   {"jsonrpc":"2.0","id":1, "method":"getHealth"}
@@ -384,8 +387,12 @@ Tracking root slot
 ```
 timeout 120 solana catchup --our-localhost=8899 --log --follow --commitment root
 ```
-curl for getBlockProduction - this is a simple curl and calls for a little bit larger JSON data response. It should be nearly instant. if it isn't there is a problem.
+curl for getBlockProduction - this is a simple curl and calls for a little bit larger JSON data response. It should be nearly instant. If it isn't there is a problem.
 ```
 curl http://localhost:8899 -k -X POST -H "Content-Type: application/json" -H "Referer: SSCLabs" -d '{"jsonrpc":"2.0","id":1, "method":"getBlockProduction"}
 '
 ```
+
+Further health checks coming soon including health checks for archival data. Shadow Nodes will store all transactions back to the genesis block 0. More curls will be placed here to make sure your node properly accesses archival. 
+
+
