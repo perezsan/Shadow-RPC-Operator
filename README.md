@@ -1,42 +1,47 @@
 # Shadow-RPC-Operator
+
 Shadow Operator resources for running a high performance &amp; high stability Shadow Node to earn rewards
+
 # Overview
 
-This guide is currenlty intended only for setting up servers from the Solana Server Program: https://solana.foundation/server-program
+This guide is currently intended only for setting up servers from the [Solana Server Program](https://solana.foundation/server-program).
 
-IMPORTANT: We are currenlty in alpha testing of Shadow Node Operators. Please reach out to a team member of GenesysGo to express interest in being an alpha tester. During this short phase of testing, there is no active $SHDW token reward emission (as the IDO has not yet occured). Additionaly, we may often make the request tha machines be turned off or removed for adjustments. This is a volunteer alpha phase and we apprecite anyoe willing to help contribute their time and resources. 
+**IMPORTANT:** We are currently in alpha testing of Shadow Node Operators. Please reach out to a team member of GenesysGo to express interest in being an alpha tester. During this short phase of testing, there is no active $SHDW token reward emission (as the IDO has not yet occured). Additionaly, we may often make the request that machines be turned off or removed for adjustments. This is a volunteer alpha phase and we appreciate anyone willing to help contribute their time and resources.
 
-This resource has a step by step guide of
+# Operating a Shadow Node
+
+This resource has a step by step guide of:
 1) Configuring a Shadow Node
-2) Connecting the Shadow Node to the SSC-DAO Shadow Network
+2) Connecting the Shadow Node to the `SSC-DAO Shadow Network`
 3) Maintaining your Shadow Node for maximum rewards payouts
 
-If you are just getting started, walking through the 1-Configuring a Shadow Node will be immensely helpful in learning the design of the machines and basic linux commands.
+If you are just getting started, walking through the "1-Configuring a Shadow Node" will be immensely helpful in learning the design of the machines and basic linux commands.
 
 For users that feel confident in their knowledge of linux systems, we also provide a bash install script. This script attempts to install the entire configuration if the following criteria has been met:
-1) You have a server through the Solana Server Program of the CPU type 75xx or 7402 with 3.8TB nvme drives. Anything different will fail.
-2) You have accessed your machine and created a user "sol" with sudo privileges 
-3) Downloaded the entire file: "shadow-rpc-install-script" to your /home/sol location.
+1) You have a server through the Solana Server Program of the CPU type 75xx or 7402 with 3.8TB nvme drives. **Anything different will fail.**
+2) You have accessed your machine and created a user `sol` with sudo privileges
+3) Downloaded the entire file: `shadow-rpc-install-script` to your `/home/sol` location.
 
-We encourage all Shadow Operators to at the very least read through the step 1-3 guide to become familiar with what the script installer will do. Otherwise if your machines breaks you may not be able to fix it before the penalties and reward slashing kick in.
+We encourage all Shadow Operators to at the very least read through the step 1-3 guide to become familiar with what the script installer will do. Otherwise, if your machines breaks you may not be able to fix it before the penalties and reward slashing kick in.
 
-# Rewards for operating a Shadow Node
+# Rewards for Operating a Shadow Node
 
-This is in final stages of development. More details of the smart contract and mathmatical framework for rewards emission will be released. Deciding to 
+This is in final stages of development. More details of the smart contract and mathematical framework for rewards emission will be released.
 
 # Other Resources & Learning
-Official Solana RPC resources to reference are located in the Solans Documentation here: https://docs.solana.com/running-validator
 
-For developers interested in a more automated control we are releasing a advanced Shadow Node operator manual in due time.
+Official Solana RPC resources to reference are located in the [Solana Documentation](https://docs.solana.com/running-validator).
 
-For more advanced developers and those interested in deploying their node and scaling their Shadow Node(s) with the ansible automation engine please see this resource by Triton: https://github.com/rpcpool
+For developers interested in a more automated control we are releasing an advanced Shadow Node operator manual in due time.
 
+For more advanced developers and those interested in deploying their node and scaling their Shadow Node(s) with the ansible automation engine please see [this resource by Triton](https://github.com/rpcpool).
 
 # Credits
-Thanks to the great group at rpcpool / Triton for their support in the Solana RPC Discord channel and for providing the broader community their resources. 
 
-We also learned very early from agjell (andrebo in Discord) who more focuses on validators but offered a great guide that helped many of the validators you see running today get online. If you are also interested in getting your very own validator up and running check his repo out: https://github.com/agjell/sol-tutorials
+Thanks to the great group at rpcpool / Triton for their support in the Solana RPC Discord channel and for providing the broader community their resources.
 
-Finally, thanks to everyone that actively offers help and advice in the Solana Discord and the SSC DAO discord. 
+We also learned very early from agjell (andrebo in Discord) who more focuses on validators but offered a great guide that helped many of the validators you see running today get online. If you are also interested in getting your very own validator up and running check out [his repo](https://github.com/agjell/sol-tutorials).
+
+Finally, thanks to everyone that actively offers help and advice in the Solana Discord and the SSC DAO discord.
 
 Don't be afraid to ask questions or submit feedback to this DAO repository!
