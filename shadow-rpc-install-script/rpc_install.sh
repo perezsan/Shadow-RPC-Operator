@@ -1,4 +1,4 @@
-#! bin/bash
+#! /bin/bash
 
 # this start by dealing with drive size larger than the default fdisk
 # function likes to work with so we use gdisk for GPT partition and then

@@ -19,6 +19,7 @@ git clone https://github.com/Shadowy-Super-Coder-DAO/Shadow-RPC-Operator.git sha
 Execute script
 ```
 cd ~/shadow-rpc-install-script
+chmod +x rpc_install.sh
 ./rpc_install.sh
 ```
 Partitioning
