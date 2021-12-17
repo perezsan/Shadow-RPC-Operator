@@ -18,11 +18,13 @@ sudo apt-get install git
 git clone https://github.com/Shadowy-Super-Coder-DAO/Shadow-RPC-Operator.git
 
 ```
-Execute script
+Execute script 
+
+**Note:** The script may trigger 
 ```
 cd ~/Shadow-RPC-Operator/shadow-rpc-install-script/
 
-./rpc_install.sh
+bash rpc_install.sh
 ```
 Partitioning
 /dev/nvme0n1 is used only.

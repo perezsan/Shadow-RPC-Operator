@@ -28,12 +28,13 @@ echo p
 echo 2
 echo 5859377152
 echo +420GB # this will be made swap
-echo w 
+echo w
+echo Y 
 ) | sudo fdisk /dev/nvme0n1
-sudo -S mkfs -t ext4 /dev/nvme0n1p1 
+sudo -S mkfs -t ext4 /dev/nvme0n1p1
 OUTPUT="$(sudo blkid -s UUID -o value /dev/nvme0n1p1)"
 echo "UUID="$OUTPUT"    /mt    ext4    auto nosuid,nodev,nofail 0 0" | sudo tee -a /etc/fstab
-sudo mkfs -t ext4 /dev/nvme0n1p2
+sudo -S mkfs -t ext4 /dev/nvme0n1p2
 OUTPUT="$(sudo blkid -s UUID -o value /dev/nvme0n1p2)"
 echo "UUID="$OUTPUT"   /mnt    ext4    auto nosuid,nodev,nofail 0 0" | sudo tee -a /etc/fstab
 sudo snap install ufw
@@ -163,16 +164,3 @@ sudo systemctl daemon-reload;sudo systemctl restart logrotate
 sudo systemctl enable --now systuner.service
 sudo systemctl enable --now sol.service
 sudo tail -f ~/log/solana-validator.log
-
-
-
-#waiting
- #echo "Wait command" &
- #process_id=$!
- #wait $process_id
- #echo "Exited with status $?"
-
-#sleeping 
- #echo “Wait for 5 seconds”
- #sleep 5
- #echo “Completed”
