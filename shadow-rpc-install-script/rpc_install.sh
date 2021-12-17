@@ -40,7 +40,7 @@ sudo snap install ufw
 echo 'y' | sudo ufw enable
 sudo ufw allow ssh
 sudo ufw allow 53;sudo ufw allow 53/tcp;sudo ufw allow 53/udp;sudo ufw allow 8899;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 8900/udp;sudo ufw allow 8901/tcp;sudo ufw allow 8901/udp;sudo ufw allow 9900/udp;sudo ufw allow 9900/tcp;sudo ufw allow 9900;sudo ufw allow 8899/udp;sudo ufw allow 8900;
-sudo mkdir /mt;
+sudo mkdir /mt; # the next few directies are sometimes skipped by script, adding remake after config
 sudo mkdir /mt/ledger;
 sudo mkdir /mt/ledger/validator-ledger;
 sudo mkdir ~/log;
@@ -51,9 +51,9 @@ sudo chown sol:sol /mt/ledger/;
 sudo chown sol:sol /mt/ledger/validator-ledger
 sudo mount /dev/nvme0n1p2 /mnt;
 sudo mount /dev/nvme0n1p1 /mt;
-sudo swapoff /dev/sda2;
-sudo swapoff /dev/sdb2;
-sudo swapoff /dev/sdc2;
+sudo swapoff /dev/sda2; # it will throw a non fatal error on whatever 2 directies are not used
+sudo swapoff /dev/sdb2; # this need improving
+sudo swapoff /dev/sdc2; # it is unpredictable which directory the Equinix provisioner will use
 sudo sed --in-place '/swap.img/d' /etc/fstab;
 sudo dd if=/dev/zero of=/mnt/swapfile bs=1M count=350k &
 while ps -p $! > /dev/null; do sleep 300; done # this is a long sleep so be patient while swapile is made
@@ -69,7 +69,6 @@ export SOLANA_METRICS_CONFIG=host=https://metrics.solana.com:8086,db=mainnet-bet
 PATH=/home/sol/.local/share/solana/install/active_release/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
 export RUST_BACKTRACE=1
 export RUST_LOG=solana=info,solana_core::rpc=debug
-export GOOGLE_APPLICATION_CREDENTIALS=/home/sol/solarchival-d87f0b4f3f3c.json
 exec solana-validator \
     --identity ~/validator-keypair.json \
     --entrypoint entrypoint.mainnet-beta.solana.com:8001 \
@@ -114,8 +113,8 @@ EOF
 
 sudo chmod +x ~/start-validator.sh;
 sudo chown sol:sol start-validator.sh;
-sudo mkdir /mt;
-sudo mkdir /mt/ledger;
+sudo mkdir /mt; # there are some repeats attempts to make directies due to script skipping on 1st attempt
+sudo mkdir /mt/ledger; # repeating to handle errors from first attempts
 sudo mkdir /mt/ledger/validator-ledger;
 sudo mkdir ~/log;
 sudo mkdir /mt/solana-accounts;
@@ -152,7 +151,7 @@ kernel.pid_max=49152
 net.ipv4.tcp_fastopen=3' | sudo tee -a /etc/sysctl.conf > /dev/null
 sh -c "$(curl -sSfL https://release.solana.com/v1.8.5/install)" && export PATH="/home/sol/.local/share/solana/install/active_release/bin:$PATH"
 
-echo | solana-keygen new -o ~/validator-keypair.json
+echo | solana-keygen new -o ~/validator-keypair.json # the spaces betwen echos are the equivalent of hitting the enter key
 
 
 echo | solana-keygen new -o ~/vote-account-keypair.json
