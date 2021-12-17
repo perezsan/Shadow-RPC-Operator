@@ -1,6 +1,6 @@
 # Notes on install script 
 
-IMPORTANT: This script will only work on a Solana Server Program machine at an Equinix data center. For all other machiens, please see our 
+IMPORTANT: This script will only work on a Solana Server Program machine at an Equinix data center. In the future we will support a more generic guide for non Solana Server Program machines.
 
 Security updates, choose your password, set up user with sudo permissions:
 ```
@@ -13,13 +13,13 @@ sudo apt-get update
 
 sudo apt-get install git
 
-git clone https://github.com/Shadowy-Super-Coder-DAO/Shadow-RPC-Operator.git shadow-rpc-install-script
+git clone https://github.com/Shadowy-Super-Coder-DAO/Shadow-RPC-Operator.git
 
 ```
 Execute script
 ```
-cd ~/shadow-rpc-install-script
-chmod +x rpc_install.sh
+cd ~/Shadow-RPC-Operator/shadow-rpc-install-script/
+
 ./rpc_install.sh
 ```
 Partitioning
