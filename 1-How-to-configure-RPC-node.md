@@ -15,7 +15,7 @@ apt dist-upgrade
 
 create user sol
 ```
-adduser sol
+adduser sol --disabled-password --gecos GECOS
 usermod -aG sudo sol
 su - sol
 ```
