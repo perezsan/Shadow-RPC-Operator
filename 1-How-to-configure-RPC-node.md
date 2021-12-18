@@ -8,19 +8,16 @@ So you have your shiny new beast of a server. Let's make it a Shadow Operator RP
 
 First things first - OS security updates
 ```
-sudo apt update
-sudo apt upgrade
-sudo apt dist-upgrade
+apt update
+apt upgrade
+apt dist-upgrade
 ```
-create user sol
 
+create user sol
 ```
 adduser sol
-
 usermod -aG sudo sol
-
 su - sol
-
 ```
 Partition hard drive for RPC
 Partition NVME into 420gb (swap) and 3000gb (ledger and accounts)
