@@ -329,7 +329,7 @@ sudo nano /etc/sysctl.conf
 edit into bottom of file
 
 ```
-# other tunings with influence and thanks to the awesome team at rpcpool (aka Triton)
+# other tunings suggested by Triton One
 # sysctl_optimisations:
 vm.max_map_count=1000000
 vm.swappiness=20

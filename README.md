@@ -16,14 +16,6 @@ This resource has a step by step guide of:
 3) Maintaining your Shadow Node for maximum rewards payouts
 
 If you are just getting started, walking through the "1-Configuring a Shadow Node" will be immensely helpful in learning the design of the machines and basic linux commands.
-
-For users that feel confident in their knowledge of linux systems, we also provide a bash install script. This script attempts to install the entire configuration if the following criteria has been met:
-1) You have a server through the Solana Server Program of the CPU type 75xx or 7402 with 3.8TB nvme drives. **Anything different will fail.**
-2) You have accessed your machine and created a user `sol` with sudo privileges
-3) Downloaded the entire file: `shadow-rpc-install-script` to your `/home/sol` location.
-
-We encourage all Shadow Operators to at the very least read through the step 1-3 guide to become familiar with what the script installer will do. Otherwise, if your machines breaks you may not be able to fix it before the penalties and reward slashing kick in.
-
 # Rewards for Operating a Shadow Node
 
 This is in final stages of development. More details of the smart contract and mathematical framework for rewards emission will be released.
