@@ -21,9 +21,9 @@ Minimums from Solana Server Program:
 *  CPU - 24 core, 2.8GHZ, AVX2 support
 *  RAM - 256GB
 *  HD  x 3
-*        Boot - 200GB SSD
-*        Ledger - 3.8TB NVME
-*        Storage - 3.8TB NVME or SSD
+         Boot - 200GB SSD
+         Ledger - 3.8TB NVME
+         Storage - 3.8TB NVME or SSD
 *  NIC - 10gig
 *  Connection - 500MB/s symmetrical
 
