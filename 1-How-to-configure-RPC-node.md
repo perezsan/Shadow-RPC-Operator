@@ -1,5 +1,7 @@
 # RPC Node config for Equinix Metal
 
+Make sure and check out the START-HERE document.
+
 IMPORTANT: This guide is specifically for Equinix Machines from the Solana Reserve pool accessed through he Solana Foundation Server Program. https://solana.foundation/server-program
 
 You must be running Ubuntu 20.04
@@ -8,9 +10,9 @@ So you have your shiny new beast of a server. Let's make it a Shadow Operator RP
 
 First things first - OS security updates
 ```
-sudo apt update
-sudo apt upgrade
-sudo apt dist-upgrade
+apt update
+apt upgrade
+apt dist-upgrade
 ```
 create user sol
 
@@ -68,6 +70,8 @@ sudo swapon --show
 You need to look at the directory and pick the correct /dev/sd*
 
 It could be /dev/sdb2 or /dev/sdc2 so edit the next line below to the proper sd**
+
+It will almost always be the one showig 1.9GB of swap size
 ```
 sudo swapoff /dev/sda2
 
@@ -79,9 +83,9 @@ sudo mount /dev/nvme0n1p1 /mt
 
 sudo dd if=/dev/zero of=/mnt/swapfile bs=1M count=350k
 ```
-it can take up to 5 minutes for the machine to make this size swapfile. sit tight.
+It can take up to 5 minutes for the machine to make this size swapfile. Sit tight.
 
-next is setting permissions and adding the swapfile to fstab, then edit the swapiness to 30.
+Next is setting permissions and adding the swapfile to fstab, then edit the swapiness to 30.
 ```
 sudo chmod 600 /mnt/swapfile
 
@@ -93,11 +97,22 @@ sudo sysctl -p
 
 sudo swapon --all --verbose
 ```
-capture nvme0n1p1 and nvme0n1p2 UUIDs to edit into /etc/fstab
+Capture nvme0n1p1 and nvme0n1p2 UUIDs to edit into /etc/fstab
+
+Let's take a look at the file first to get an idea of what is needed here.
+```
+sudo nano /etc/fstab
+```
+You should see something similar to this:
+UUID=e6eafc79-85c3-4208-82ac-41b73d75cd31       /       ext4    errors=remount-ro       0       1
+UUID=4b8f8a7b-8b8f-4984-a341-5770f8b365a1       none    swap    none    0       0
+
+These are the default OS drives and should be left alone. Do not overwrite them. You will need to add the two new UUID's of the two partitions you just made (nvmeon1p1 and nvme0n1p2).
+
 ```
 lsblk -f
 ```
-copy the section that looks like this and past it into a notepad (or VScode, etc) so that you can copy/past into fstab properly. We just need the UUID's so in the example below copy "5c24e241-239c-4aa5-baa6-fbb6fb44a847" and "87645b08-85c2-4fe2-9974-1bda4de317d9" and note which partition each belongs to (/mt and /mnt respectively)
+Copy the section that looks similar to the below nvme0n1 partition tree and past it into a notepad (or VScode, etc) so that you can copy/past into fstab properly. We just need the UUID's so in the example below copy "5c24e241-239c-4aa5-baa6-fbb6fb44a847" and "87645b08-85c2-4fe2-9974-1bda4de317d9" and note which partition each belongs to (/mt and /mnt respectively). Your UUIDs will be different!
 ```
 nvme0n1
 ├─nvme0n1p1 ext4         5c24e241-239c-4aa5-baa6-fbb6fb44a847    2.8T     0% /mt
@@ -107,10 +122,10 @@ These UUID above need to be edited into the fstab config below
 ```
 sudo nano /etc/fstab
 ```
-dump this into fstab below the current UUIDs. delete or hash out the old dwap UUID if needed. Leave the first UUIDs (OS related), just append these lines under whatever current UUIDs are listed as the ones already in the file are boot/OS related.
+dump this into fstab below the current UUIDs. delete or hash out the old swap UUID if needed. Leave the first UUIDs (OS related), just **append these lines under whatever current UUIDs are listed** as the ones already in the file are boot/OS related.
 also make sure UUID is correct as they can change
 
-Copy the below into a notepad along with the above "lsblk -f" information and then update the UUIDs to be the new ones from the current RPC. THen you paste this into the fstab file mentioned above
+Once you update the UUIDs below (which are just examples) to the ones you gathered from your machine, paste this into the fstab file mentioned above **underneath the existing file entries**.
 ```
 #GenesysGo RPC config
 UUID=5c24e241-239c-4aa5-baa6-fbb6fb44a847 /mt  auto nosuid,nodev,nofail 0 0
@@ -124,7 +139,19 @@ ctrl+s, ctrl+x
 
 But Wait - what was that ramdrive and tmpfs stuff? Leave it for now. That is an performance enhancement option that will be covered in later documentation. In short, it's for running the solana-accounts inside the memory of the server versus on the hard drive. More on this later.
 
+The complete file should look like this (but with your own UUIDs):
+```
+UUID=e6eafc79-85c3-4208-82ac-41b73d75cd31       /       ext4    errors=remount-ro       0       1
+UUID=4b8f8a7b-8b8f-4984-a341-5770f8b365a1       none    swap    none    0       0
+#GenesysGo RPC config
+UUID=5c24e241-239c-4aa5-baa6-fbb6fb44a847 /mt  auto nosuid,nodev,nofail 0 0
+UUID=87645b08-85c2-4fe2-9974-1bda4de317d9 /mnt  auto nosuid,nodev,nofail 0 0
+#ramdrive and swap
+#tmpfs /mnt/ramdrive tmpfs rw,size=60G 0 0
+/mnt/swapfile none swap sw 0 0
 now edit permissions and make sure user sol is the owner for solana directories
+```
+
 ```
 sudo chown sol:sol /mt/solana-accounts
 
@@ -134,7 +161,7 @@ sudo chown sol:sol ~/log
 
 sudo chown sol:sol /mt/ledger/validator-ledger
 ```
-mount everything
+Mount everything.
 ```
 sudo mount --all --verbose
 ```
@@ -147,26 +174,35 @@ sudo ufw enable
 
 sudo ufw allow ssh
 ```
-dump this entire command block
+There are additional ports in prep for open source monitoring stack and other networking features. It is important to understand how UFW works and how to manage the attack surface of the machine. If you want to identify the ports solana needs (8000-8020) and reduce your attack surface by only enable those at this time please do. As Shadow Protocol evolves so will the port exposures and the need for awareness around those.
+
+Dump this entire command block for basic Shadow Node function:
+```
+sudo ufw allow 53;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 8000:8020/tcp;sudo ufw allow 8000:8020/udp
+```
+These additional rules are in preparation for more Shadow Protocol features. Just drop this expanded rules block when there is a request from the team to expand ports:
 ```
 sudo ufw allow 80;sudo ufw allow 80/udp;sudo ufw allow 80/tcp;sudo ufw allow 53;sudo ufw allow 53/tcp;sudo ufw allow 53/udp;sudo ufw allow 8899;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 8900/udp;sudo ufw allow 8901/tcp;sudo ufw allow 8901/udp;sudo ufw allow 9900/udp;sudo ufw allow 9900/tcp;sudo ufw allow 9900;sudo ufw allow 8899/udp;sudo ufw allow 8900;sudo ufw allow 8000:8020/tcp;sudo ufw allow 8000:8020/udp
 ```
-# Install Solana CLI! Don't forget to check for current version (1.8.10 as of 12/14/21)
-
-these are three separate commands below:
+# Install the Solana CLI! Don't forget to check for current version (1.8.11 as of 12/14/21)
 
 ```
-sh -c "$(curl -sSfL https://release.solana.com/v1.8.10/install)"
-
+sh -c "$(curl -sSfL https://release.solana.com/v1.8.11/install)"
+```
+I will ask you to map the PATH just copy and paste the blow:
+```
 export PATH="/home/sol/.local/share/solana/install/active_release/bin:$PATH"
+```
+You are now able to join Solana gossip which is an overarching network communication layer which all RPCs and Validators chatter in. If you see a steam of logs, and no errors then have officially connected directly to the Solana network.
 
+```
 solana-gossip spy --entrypoint entrypoint.mainnet-beta.solana.com:8001
 ```
-if the machine is gossiping without any errors it can be spun up on the mainnet to start reading the chain.
+If your machine is gossiping without any errors it can be spun up on the mainnet to start reading the chain data.
 
 exit gossip with ctrl + c
 
-now create keys.
+Now create keys.
 
 RPCs use throw away keys. These keys allow and RPC to be fully functional but do not need funds and do not need to be saved (because you can just make new ones if you need to ). You do not need to set a password for the keys. No need to copy seed phrases. You do not need a wallet-keypair if just RPC. **Do not move SOL into these wallets. This is not a validator**
 ```
@@ -233,21 +269,21 @@ exec solana-validator \
     --rpc-pubsub-max-connections 1000 \
 
 ```
-save / exit (:wq)
+save / exit (ctrl+s then ctrl+x)
 
-make executable
+Make this shell file executable.
 ```
 sudo chmod +x ~/start-validator.sh
 ```
-change the ownership to user sol
+Change the ownership to user sol
 ```
 sudo chown sol:sol start-validator.sh
 ```
-create system service - sol.service (run on boot, auto-restart when sys fail) 
+Create the Solana system service - sol.service (run on boot, auto-restart when sys fail) 
 ```
 sudo nano /etc/systemd/system/sol.service
 ```
-dump this into file:
+Dump this into file:
 ```
 [Unit]
 Description=Solana Validator
@@ -269,13 +305,13 @@ ExecStart=/home/sol/start-validator.sh
 [Install]
 WantedBy=multi-user.target
 ```
-save/exit (:wq)
+save/exit (ctrl+s then ctrl+x)
 
-make system tuner service - systuner.service
+Make system tuner service - systuner.service
 ```
 sudo nano /etc/systemd/system/systuner.service
 ```
-dump this into file:
+Dump this into file:
 ```
 [Unit]
 Description=Solana System Tuner
@@ -289,11 +325,11 @@ ExecStart=/home/sol/.local/share/solana/install/active_release/bin/solana-sys-tu
 [Install]
 WantedBy=multi-user.target
 ```
-reload the system services
+Reload the system services
 ```
 sudo systemctl daemon-reload
 ```
-log rotation for ~/log/solana-validator.log
+Create log rotation for ~/log/solana-validator.log
 ```
 sudo nano /etc/logrotate.d/solana
 ```
@@ -309,12 +345,12 @@ dump this into file:
   endscript
 }
 ```
-reset log rotate
+Reset log rotate
 ```
 sudo systemctl restart logrotate
 ```
 
-CPU to performance mode (careful with this)
+Set CPU to performance mode (careful with this if you are adapting these configs to different hardware)
 ```
 sudo apt-get install cpufrequtils
 
@@ -351,7 +387,7 @@ net.core.wmem_max=134217728
 net.core.wmem_default=134217728
 ```
 
-# start up and test
+# Start up and test the Shadow Node
 
 ```
 sudo systemctl enable --now systuner.service
@@ -362,15 +398,17 @@ sudo systemctl enable --now sol.service
 
 sudo systemctl status sol.service
 ```
-or this (prefer the above - the option to use bash is just for debugging)
+Or you can run with the bash (prefer the above - this option to use bash is just for debugging). If you are newer to Linux, and do not yet know how to use tmux, or screen then you should read up on terminal multiplexers.
 ```
-./start-validator.sh
+tmux
+
+bash start-validator.sh
 ```
-tail log to make sure it's fetching snapshot and working
+Tail the log to make sure it's fetching snapshot and working
 ```
 sudo tail -f ~/log/solana-validator.log
 ```
-The result should be the machine start tailing the validator log. It can take up to 20 minutes to download a snapshot and begin catching up. The catchup can take up to 45 minutes as well. You can run healthchecks to know when the machine is on the top of the chain (healthy and ready to serve data) by using some of the below commands:
+The result should be a log stream that is attempting to find trusted Solana nodes to download your very first snapshot. A snapshot is a fragment of the total ledger and will allow your machines to identity ledger state and race to the tip if the chain. It can take up to 20 minutes to download a snapshot and begin catching up. The catchup can take up to 45 minutes as well. You can run healthchecks to know when the machine is on the top of the chain (healthy and ready to serve data) by using some of the below commands:
 
 Healthcheck - you want this to return the work "Ok"
 
@@ -392,7 +430,6 @@ curl for getBlockProduction - this is a simple curl and calls for a little bit l
 curl http://localhost:8899 -k -X POST -H "Content-Type: application/json" -H "Referer: SSCLabs" -d '{"jsonrpc":"2.0","id":1, "method":"getBlockProduction"}
 '
 ```
-
 Further health checks coming soon including health checks for archival data. Shadow Nodes will store all transactions back to the genesis block 0. More curls will be placed here to make sure your node properly accesses archival. 
 
 

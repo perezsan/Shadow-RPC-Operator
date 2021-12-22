@@ -4,6 +4,9 @@ We are currently in early alpha testing of independent RPC operators. We are con
 
 12/15/21
 UPDATE: Alpha Shadow Node testing is still ongoing
+12/22/21
+UPDATE: Alpha Shadow Node pool has reached the ideal number of test ShadowOps and will closing until after the IDO.
+
 
 Connecting to our network currently involves three steps:
 

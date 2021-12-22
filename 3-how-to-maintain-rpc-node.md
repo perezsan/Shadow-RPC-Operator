@@ -2,6 +2,9 @@
 
 More to this section coming soon. 
 
+Join Discord - Shadow Ops channel - https://discord.gg/c7ts863T
+
+
 
 Healthcheck
 ```
@@ -21,14 +24,12 @@ curl http://localhost:8899 -k -X POST -H "Content-Type: application/json" -H "Re
 '
 ```
 
-Grafana Dashboard
-
-
-Discord Integration (Shadow Ops Channel) coming soon.
+Grafana Dashboard coming soon
 
 
 Alerts coming soon.
 
 
 Useful server commands for running system checks coming soon.
+
 
