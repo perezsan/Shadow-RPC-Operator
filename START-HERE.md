@@ -31,9 +31,9 @@ Custom Builders see above minimums or the below general guidance. These are gene
 # Operating a Shadow Node
 
 This resource has a step by step guide of:
-1) Configuring a Shadow Node
-2) Connecting the Shadow Node to the `SSC-DAO Shadow Network`
-3) Maintaining your Shadow Node for maximum rewards payouts
+1) [Configuring a Shadow Node](https://github.com/Shadowy-Super-Coder-DAO/Shadow-RPC-Operator/blob/main/1-How-to-configure-RPC-node.md)
+2) [Connecting](https://github.com/Shadowy-Super-Coder-DAO/Shadow-RPC-Operator/blob/main/2-How-to-connect-to-network.md) the Shadow Node to the `SSC-DAO Shadow Network`
+3) [Maintaining](https://github.com/Shadowy-Super-Coder-DAO/Shadow-RPC-Operator/blob/main/3-how-to-maintain-rpc-node.md) your Shadow Node for maximum rewards payouts
 
 If you are just getting started, walking through the `1-Configuring a Shadow Node` will be immensely helpful in learning the design of the machines and basic linux commands. The guide is designed to support a Linux novice. 
 
