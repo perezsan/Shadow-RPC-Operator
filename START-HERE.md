@@ -18,24 +18,16 @@ A Solana Shadow Node has similar hardware requirements to the Solana RPC with th
 If you are utilizing the Solana Server Program for your hardware, please make sure you have two larger drives as detailed below:
 
 Minimums from Solana Server Program:
-*  CPU - 24 core, 2.8GHZ, AVX2 support
+*  CPU - 24 core, 2.8GHZ, AVX2 support (Prefer 3.0GHZ+)
 *  RAM - 256GB
 *  HD  x 3
-       * Boot - 200GB SSD
-       * Ledger - 3.8TB NVME
-       * Storage - 3.8TB NVME or SSD
+       - Boot - 200GB SSD
+       - Ledger - 3.8TB NVME
+       - Storage - 3.8TB NVME or SSD
 *  NIC - 10gig
 *  Connection - 500MB/s symmetrical
 
-Custom Builders see above minimums or the preferred below:
-*  CPU - 24 core, 3.1GHZ+, AVX2 support
-*  RAM - 256GB-512GB
-*  HD  x 3
-       * Boot - 200GB+ SSD
-       * Ledger - 3.8TB+ NVME
-       * Storage - 10TB+ NVME or High durability SSD
-*  NIC - 2 x 10 gig Bonded
-*  Connection - 1GB/s symmetrical
+Custom Builders see above minimums or the below general guidance. These are generalizations and subject to change. They have 
 # Operating a Shadow Node
 
 This resource has a step by step guide of:
