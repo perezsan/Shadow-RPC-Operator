@@ -75,7 +75,7 @@ services:
     container_name: caddy
     ports:
       - "3000:3000"
-      - "9090:9090"
+      # - "9090:9090"
     volumes:
       - ./caddy:/etc/caddy
     environment:
