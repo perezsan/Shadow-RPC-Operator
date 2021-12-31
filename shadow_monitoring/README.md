@@ -132,6 +132,7 @@ or download the tar file and untar using:
 ```tar -xvf monitoring.tar.gz```
 
 Enter Shadow Monitoring Folder
+
 ```cd ~/Shadow-RPC-Operator/shadow_monitoring```
 
 Create a docker storage for Grafana so that its persistent during reboots:
