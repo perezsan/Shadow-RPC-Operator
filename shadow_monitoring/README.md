@@ -137,11 +137,11 @@ Enter Shadow Monitoring Folder
 
 Create a docker storage for Grafana so that its persistent during reboots:
 
-```sudo docker volume create grafana-storage```
+```docker volume create grafana-storage```
 
 Run Docker Compose and turn up the monitoring
 
-```sudo docker-compose up -d```
+```docker-compose up -d```
 
 Connect to grafana by going to the IP of the server with port 3000:
 
