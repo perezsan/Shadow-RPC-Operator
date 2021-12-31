@@ -17,6 +17,12 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets: ['nodeexporter:9100']
+    relabel_configs:
+      - source_labels: ["__address__"]
+        separator: ":"
+        regex: "(.*):.*"
+        target_label: "instance"
+        replacement: "${1}"
 
   - job_name: 'prometheus'
     scrape_interval: 10s
