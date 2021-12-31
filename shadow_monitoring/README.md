@@ -127,9 +127,6 @@ Clone the shadow_monitoring repository:
 
 ```git clone https://github.com/Shadowy-Super-Coder-DAO/Shadow-RPC-Operator.git```
 
-or download the tar file and untar using:
-
-```tar -xvf monitoring.tar.gz```
 
 Enter Shadow Monitoring Folder
 
@@ -138,6 +135,18 @@ Enter Shadow Monitoring Folder
 Create a docker storage for Grafana so that its persistent during reboots:
 
 ```docker volume create grafana-storage```
+
+**OPTIONAL**
+
+If you'd like to view prometheus, complete the following to protect it.
+
+Perform:
+
+```docker run --rm caddy caddy hash-password --plaintext 'ADMIN_PASSWORD'``` 
+
+in order to generate a hash for your new password. ENSURE that you replace ADMIN_PASSWORD with new plain text password and ADMIN_PASSWORD_HASH with the hashed password references in docker-compose.yml for the caddy container.
+
+You will need to uncomment the ```9090:9090``` in the caddy section of the docker-compose.yml
 
 Run Docker Compose and turn up the monitoring
 
@@ -153,12 +162,6 @@ Login with default credentials
 
 ```admin/admin```
 
-**Importing Prometheus as a dataset to Grafana**
-
-Hover over the gear button on the left panel near the bottom of the column and click **Data Sources**.  Click **Add Data Source** in the upper right hand side.  Select **Prometheus** from the list (will most likely be near the top).  http://prometheus:9090 (the hostname prometheus will work because of the shadow docker-compose built docker network).  **ENSURE PORT IS 9090, NOT 9000**  Add and save at the bottom. 
-
-Navigate on the left to the Dashboards button.  This looks like 4 squares stacked.  Click import in the upper right of this screen.  Under import via grafana.com, type:
-```1860```
-Once this loads, click import at the bottom.
+You will be asked to change the admin password.
 
 You now have a full linux node dashboard for your server and should start to see your metrics populate the dashboard soon.  More dashboards from GG will be coming soon, so stay tuned!
