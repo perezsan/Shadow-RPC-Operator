@@ -123,20 +123,24 @@ docker-compose version v2.2.2
 ```
 
 
-Clone the shadow_monitoring repository or download the tar file and untar using:
+Clone the shadow_monitoring repository:
+
+```git clone https://github.com/Shadowy-Super-Coder-DAO/Shadow-RPC-Operator.git```
+
+or download the tar file and untar using:
 
 ```tar -xvf monitoring.tar.gz```
 
 Enter Shadow Monitoring Folder
-```cd shadow_monitoring```
+```cd ~/Shadow-RPC-Operator/shadow_monitoring```
 
 Create a docker storage for Grafana so that its persistent during reboots:
 
-```docker volume create grafana-storage```
+```sudo docker volume create grafana-storage```
 
 Run Docker Compose and turn up the monitoring
 
-```docker-compose up -d```
+```sudo docker-compose up -d```
 
 Connect to grafana by going to the IP of the server with port 3000:
 
