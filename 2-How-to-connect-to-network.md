@@ -6,13 +6,17 @@ We are currently in early alpha testing of independent RPC operators. We are con
 UPDATE: Alpha Shadow Node testing is still ongoing
 12/22/21
 UPDATE: Alpha Shadow Node pool has reached the ideal number of test ShadowOps and will closing until after the IDO.
+01/08/22
+UPDATE: Adding script and information on how to connect your node automatically via discord.
 
 
 Connecting to our network currently involves three steps:
 
-1) Submitting your RPC Server IP address to our performance-auditor for pass/fail assessment. Please reach out to a team member at GenesysGo for intructions.
+1) Run the getShadowInfo.sh shell script located in the Shadow-RPC-Operator folder.  Once you download this, you may need to run ```chmod +x getShadowInfo.sh``` to make the file exectuable.  Then run ```./getShadowInfo.sh``` to run the file.  **NOTE: YOU WILL BE REQUIRED TO GRAB THE WEBHOOK URL FROM THE SHADOW OPERATORS DISCORD.  THIS IS NOT BEING PLACED IN THE GITHUB FOR SECURITY REASONS.**  
 
-2) After audit is passed, submission into the global traffic engine.
+2) When your node is ready and you're ready to put into the shadow network, you will run the following command in the shadow-operators channel: 
 
-3) Verifying connection to health check bots in SSC DAO discord channel and confirming calls are properly serving. 
+```!activate-node <hostname>```
+
+3) Verify connection to health check bots in SSC DAO discord channel and confirming calls are properly serving. 
 
