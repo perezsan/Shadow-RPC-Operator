@@ -1,4 +1,4 @@
-# Shadow Node FAQ & Maintenacne Guide
+# Shadow Node FAQ & Maintenance Guide
 
 This FAQ is a DAO-owned community driven effort to collect knowledge on understanding and troubleshooting the Shadow RPC Node. There are two responses to each subject: 1) a short technical one, and 2) an explanation.
 
