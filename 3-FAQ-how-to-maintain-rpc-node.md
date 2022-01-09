@@ -138,7 +138,7 @@ Check PIDs for a ghost log. The machine may have rotated logs properly but there
 	
 >**Explanation:**  
 You may not be properly rotating logs. One of the most common mistakes is incorreclty stating the log directly inside the `/etc/logrotate.d/solana` where it should point at `~/log/solana-validator.log`
-You might have also hit the 0 key one too many times in the `~/start-validator.sh` file o the line that says `--limit-ledger-size 700000000 \`
+You might have also hit the 0 key one too many times in the `~/start-validator.sh` file on the line that says `--limit-ledger-size 700000000 \`
 Use commands like `df -l` to check hard drive space and `ls -la` to list files by their sizes
 
 #
@@ -154,7 +154,7 @@ Check IP access logs (see IP accessing your machine)
 #help finish this
 	
 >**Explanation:**  
-UFW blocks port unless you tell it to open them. Even if you allow port access, you still have to have software that open and closes the ports. The fact that UFW allows ports 8000-8020/tcp/udp for example to be accessible still requires sending the correct languqge to enter the port andf for the solana software to recognix the incoming requests and open the port. If there is a port that is open an it doesn't have a purpose then close it. If you are not sure then ask a fellow Shadow Ops. Here is a list of ports and what they do:
+UFW blocks port unless you tell it to open them. Even if you allow port access, you still have to have software that open and closes the ports. The fact that UFW allows ports 8000-8020/tcp/udp for example to be accessible still requires sending the correct language to enter the port and for the solana software to recognix the incoming requests and open the port. If there is a port that is open and it doesn't have a purpose then close it. If you are not sure then ask a fellow Shadow Ops. Here is a list of ports and what they do:
 	
 53
 80
@@ -171,19 +171,19 @@ Cpefrequtils (finish this)
 NIC
 	
 >**Explanation:**   
-Pay attention to yrou grafana dashboard. Know what is normal and what isn't. 40% CPU is normal. 100% isn't. So set an alert in grafana to ping/text you when your node hits 95% CPU. Set alerts to detect when /dev/nvme0n1p1 (the ledger partition) is at 90%+ allocation. 
+Pay attention to your grafana dashboard. Know what is normal and what isn't. 40% CPU is normal. 100% isn't. So set an alert in grafana to ping/text you when your node hits 95% CPU. Set alerts to detect when /dev/nvme0n1p1 (the ledger partition) is at 90%+ allocation. 
 
 
 #
-## What is the deal with all these system optimizations and can I play around with the?
+## What is the deal with all these system optimizations and can I play around with them?
 
 **Technical:**   
 Edit system ops in `/etc/sysctl.conf`   
 
-There is a of room to expkore here. Share your findiings with the DAO!
+There is a lot of room to explore here. Share your findings with the DAO!
 	
 >**Explanation:**   
-The main purpose is to make sure TCP memory buffers (the little bits of virtual memory allocated to mainteing each TCP port) is allocated nicely. Solana opens a lot of TCP connection and in linux each connection is assigned two header files (inbound and outboudn) and so you need to tell the kernel it's ok allow for a LOT of these file maps. Solana Shadow RPCs run with giant swapfiles. You can handle RAM blooming (spikes) better if you have properly informed the kernel to use swap when needed. Swapiness at 1 and the kernel won't use swap, but at 60 it may consume too much swap. Other things include very minor tunes to memory handling.
+The main purpose is to make sure TCP memory buffers (the little bits of virtual memory allocated to maintaining each TCP port) is allocated nicely. Solana opens a lot of TCP connections and in linux each connection is assigned two header files (inbound and outboudn) and so you need to tell the kernel it's ok allow for a LOT of these file maps. Solana Shadow RPCs run with giant swapfiles. You can handle RAM blooming (spikes) better if you have properly informed the kernel to use swap when needed. Set swapiness at 1 and the kernel won't use swap, but at 60 it may consume too much swap. Other things include very minor tunes to memory handling.
 
 #
 ## How do I better understand my regional network telemetry?
