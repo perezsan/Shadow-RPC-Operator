@@ -16,7 +16,7 @@ Connecting to our network currently involves three steps:
 
 2) When your node is ready and you're ready to put into the shadow network, you will run the following command in the shadow-operators channel: 
 
-```!activate-node <hostname>```
+  ```!activate-node <hostname>```
 
 3) Verify connection to health check bots in SSC DAO discord channel and confirming calls are properly serving. 
 
