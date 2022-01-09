@@ -5,6 +5,7 @@ This FAQ is a DAO-owned community driven effort to collect knowledge on understa
 Update 01/08/2022 - most technical responses have been started, with full explanations to follow. Please feel free to submit PR's to this resource and help build out the knowledge base.
 
 
+##
 **How do I know if it set up the node properly and it will connect?**
 
 Tech:
@@ -14,7 +15,8 @@ check health - `curl http://localhost:8899 -k -X POST -H "Content-Type: applicat
 
 Full:
 Using `sudo systemctl status sol.service` is checking for the sol.service system process. You created this in the file /etc/systemd/system/sol.service folder. This is where many system processes live and they run in the background. Solana service, the system tuner, and the log rotation for the solana log file are all processes you created in set up and they run by themselves when you start or restart the server. If there is a failure of the node, the system services restart on their own. `sudo systemctl status sol.service` check to see if it's alive. If it isn't - you need to hunt down why in the logs.
-	
+
+##
 **How do I hunt for issues in logs?**
 
 Tech:
@@ -24,7 +26,7 @@ Tech:
 Full:
 You want to learn to tail, cat, and filter the solana validator log. You also need to learn that when something goes wrong both the solana log and the syslog have answers. Determining the cause of a critical fault is often identifying the error in the log, and then identifying the time that it happned, and comparing that time across your other logs (like syslog or kernlog or OOM logs). The Solana RPC produces a information rich log and you will need to get familiar parsing it.
 
-
+##
 **I followed the guide, but it will not connect to the cluster.**
 
 Tech:
@@ -35,6 +37,7 @@ Check permissions on `/mt/solana-accounts` and `/mt/ledger/validator-ledger` all
 Check syntax in all of the files you created - `/etc/systemd/system/sol.service`, `/etc/systemd/system/systuner.service`, `/etc/lograte.d/solana`
 Ping something. Ping yourself. Check for NIC errors `
 
+##
 **Why does my node keep falling behind?**
 
 Tech:
@@ -52,7 +55,8 @@ Welcome to the world's fastest blockchain. It's a common facet of node operation
 3 - There should be an entrypoint that you can ping or run a traceroute on that provides a low latency entry into the gossip network. You should be able to ping local validator or the Shadow Protocl's local load balancer and get sub 100ms (ideally sub 60ms) pings.
 	
 If your node falls off the tip by about 100-300 slots and recovers in a matter of seconds that is common. If it is nose diving or falling very behind you have a problem. 
-	
+
+##
 **Why did my node just restart and my health check shows "connection refused?"**
 	
 Tech: 
@@ -60,14 +64,12 @@ Check swap and virtual memory allocations.
 Check OOM killer
 Check packet loss, NIC errors
 Flush IP tables and reset UFW with the following large command block (drop to root to do this) and restart afterwards:
-	
-##
-#big ass IP table flush comand goes here
-##
+`ufw disable;apt-get remove ufw;apt-get purge ufw;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT;iptables -F;iptables -X;iptables -Z ;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -t raw -F;iptables -t raw -X;apt update;apt upgrade;apt dist-upgrade;apt install ufw;ufw enable;ufw allow ssh;ufw allow 22;ufw allow 80;ufw allow 80/udp;ufw allow 80/tcp;ufw allow 53;ufw allow 53/tcp;ufw allow 53/udp;ufw allow 8899;ufw allow 8899/tcp;ufw allow 8900/tcp;ufw allow 8900/udp;ufw allow 8901/tcp;ufw allow 8901/udp;ufw allow 9900/udp;ufw allow 9900/tcp;ufw allow 9900;ufw allow 8899/udp;ufw allow 8900;ufw allow 8000:8020/tcp;ufw allow 8000:8020/udp`
 
 Full:
 Nodes can become unhealthy enough to being restarting all on their own (the Solana software will restart, not the physical machine). The system process `/etc/systemd/system/sol.service` has an automatic restart parameter so the node will try and reboot immediatley and get back to the tip. If you aren't around when this happens you have to filters logs to try and determine the cause. It could be that memory allocations are too low and the OOM (Out of memory killer) is coming after you. Or you could be encounter network disconnections. It's also possible it's as simple as you are on the wrong version of solana. Run through all the other troubleshooting problems and share your logs with the Shadow Ops discord channel to get help.
 
+##
 **How do I see how many clients are connected?**
 
 Tech:
@@ -78,19 +80,17 @@ Tech:
 Full:
 need some examples here and deferal to grafana dashboards
 
+##
 **How do I know if I am serving errors?**
 
 Tech:
 	
 	
 Full:
-One of the best ways to know if you are properly serving content is the run queireis (called curls) against your node. The more you play with these curls the more you will underatns what is being asked of your machines and exactly how the data look when it is served out by Shadow Protocol. Here are some additional curls:
+One of the best ways to know if you are properly serving content is the run queireis (called curls) against your node. The more you play with these curls the more you will understand what is being asked of your machines and exactly how the data look when it is served out by Shadow Protocol. Here are some additional curls (makes ure and replace them with your IP):
 	
-##
-# curls go here
-##
-	
-	
+(neec to finish) curls here
+
 In addition to this you should monitor TCP packet loss or TCP connections drops by using the grafana observability stack. This is open source code and the DAO owns a guide that help you install this monitoring on your node.
 
 
@@ -133,9 +133,7 @@ UFW blocks port unless you tell it to open them. Even if you allow port access, 
 8001
 8002:8020/tcp/udp
 	
-##
 #Finish this
-##
 
 **What type of hardware checks should I run?**
 
