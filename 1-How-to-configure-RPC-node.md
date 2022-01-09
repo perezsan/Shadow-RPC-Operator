@@ -24,6 +24,21 @@ usermod -aG sudo sol
 su - sol
 
 ```
+
+**Hostname Creation**
+
+In order for the shadow network to accept your machine, you need to set your hostname with the following parameters:
+
+**You must use the following for your hostname or your request to join the network will be rejected**:
+```shadow-<region>-<discordname>-<discordusernumber>-<servercount>```
+
+For example, if you are in the North American region and your discord name is johndoe#1234, your server would be:
+```shadow-na-johndoe-1234-01```
+
+The server count represents your personal shadow nodes.  If you only have 1, it would be 01, if you have 2 and this is your second, it would be 02, and so on.
+You can set your hostname with the following command:
+```sudo hostnamectl set-hostname newNameHere``` 
+
 Partition hard drive for RPC
 Partition NVME into 420gb (swap) and 3000gb (ledger and accounts)
 
