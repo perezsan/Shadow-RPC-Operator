@@ -56,7 +56,7 @@ n, 1, p, 2048, [max secor available], 8300, p, w
 note the first step in the next section is deleting the partition we just created above
 ```
 sudo fdisk /dev/nvme0n1
-d, n, p, 1 or 2, default sector, +3000GB, n, p, 1 or 2, default sector, +420GB, w
+d, n, 1 or 2, default sector, +3000GB, n, 1 or 2, default sector, +420GB, w
 ```
 Now make filessytems, directories, delete and make new swap, etc.
 ```
