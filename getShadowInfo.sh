@@ -1,7 +1,7 @@
 #! /bin/bash
 
 echo "Gathering Hostname and Public IP information..."
-HOST=$(hostname -f)
+HOST=$(hostname)
 IP=$(curl -4 icanhazip.com)
 SHADOWCHECK=${HOST:0:6}
 REGION=${HOST:7:2}
