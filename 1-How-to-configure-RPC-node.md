@@ -421,6 +421,9 @@ curl http://localhost:8899 -k -X POST -H "Content-Type: application/json" -d '
 '
 ```
 
+Please see [shadow_monitoring](./Shadow-RPC-Operator/shadow_monitoring/README.md) for a guide on settin uo your own observability stack. This allows you to view your Shadow RPC Node's metrics (hardware health, network health, etc.).
+
+
 Tracking root slot
 ```
 timeout 120 solana catchup --our-localhost=8899 --log --follow --commitment root
