@@ -416,6 +416,8 @@ sudo systemctl enable --now sol.service
 
 sudo systemctl status sol.service
 ```
+Note that you may need to type :q (i.e. colon followed by q) to get back to the shell prompt. <br>
+
 Or you can run with the bash (prefer the above - this option to use bash is just for debugging). If you are newer to Linux, and do not yet know how to use tmux, or screen then you should read up on terminal multiplexers.
 ```
 tmux
