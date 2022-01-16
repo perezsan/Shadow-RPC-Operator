@@ -202,10 +202,10 @@ These additional rules are in preparation for more Shadow Protocol features. Jus
 ```
 sudo ufw allow 80;sudo ufw allow 80/udp;sudo ufw allow 80/tcp;sudo ufw allow 53;sudo ufw allow 53/tcp;sudo ufw allow 53/udp;sudo ufw allow 8899;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 8900/udp;sudo ufw allow 8901/tcp;sudo ufw allow 8901/udp;sudo ufw allow 9900/udp;sudo ufw allow 9900/tcp;sudo ufw allow 9900;sudo ufw allow 8899/udp;sudo ufw allow 8900;sudo ufw allow 8000:8020/tcp;sudo ufw allow 8000:8020/udp
 ```
-# Install the Solana CLI! Don't forget to check for current version (1.8.11 as of 12/14/21)
+# Install the Solana CLI! Don't forget to check for current version (1.8.12 as of 12/14/21)
 
 ```
-sh -c "$(curl -sSfL https://release.solana.com/v1.8.11/install)"
+sh -c "$(curl -sSfL https://release.solana.com/v1.8.12/install)"
 ```
 I will ask you to map the PATH just copy and paste the blow:
 ```
