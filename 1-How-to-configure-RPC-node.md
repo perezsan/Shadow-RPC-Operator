@@ -200,12 +200,12 @@ sudo ufw allow 53;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow
 ```
 These additional rules are in preparation for more Shadow Protocol features. Just drop this expanded rules block when there is a request from the team to expand ports:
 ```
-sudo ufw allow 80;sudo ufw allow 80/udp;sudo ufw allow 80/tcp;sudo ufw allow 53;sudo ufw allow 53/tcp;sudo ufw allow 53/udp;sudo ufw allow 8899;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 8900/udp;sudo ufw allow 8901/tcp;sudo ufw allow 8901/udp;sudo ufw allow 9900/udp;sudo ufw allow 9900/tcp;sudo ufw allow 9900;sudo ufw allow 8899/udp;sudo ufw allow 8900;sudo ufw allow 8000:8020/tcp;sudo ufw allow 8000:8020/udp
+sudo ufw allow 53;sudo ufw allow 53/tcp;sudo ufw allow 53/udp;sudo ufw allow 8899;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 8900/udp;sudo ufw allow 8901/tcp;sudo ufw allow 8901/udp;sudo ufw allow 9900/udp;sudo ufw allow 9900/tcp;sudo ufw allow 9900;sudo ufw allow 8899/udp;sudo ufw allow 8900;sudo ufw allow 8000:8020/tcp;sudo ufw allow 8000:8020/udp
 ```
 # Install the Solana CLI! Don't forget to check for current version (1.8.12 as of 12/14/21)
 
 ```
-sh -c "$(curl -sSfL https://release.solana.com/v1.8.12/install)"
+sh -c "$(curl -sSfL https://release.solana.com/v1.8.13/install)"
 ```
 I will ask you to map the PATH just copy and paste the blow:
 ```
@@ -240,11 +240,10 @@ dump this into start-validator.sh:
 
 ```
 #!/bin/bash
-# v0.5 Shadow Node ( updated 12/14/2021)
+# v1.0 Shadow Node ( updated 01/21/2022)
 export SOLANA_METRICS_CONFIG=host=https://metrics.solana.com:8086,db=mainnet-beta,u=mainnet-beta_write,p=password
 PATH=/home/sol/.local/share/solana/install/active_release/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
 export RUST_BACKTRACE=1
-export RUST_LOG=solana=info,solana_core::rpc=debug
 exec solana-validator \
     --identity ~/validator-keypair.json \
     --entrypoint entrypoint.mainnet-beta.solana.com:8001 \
