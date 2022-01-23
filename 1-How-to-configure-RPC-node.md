@@ -267,7 +267,6 @@ exec solana-validator \
     --no-voting \
     --private-rpc \
     --rpc-bind-address 0.0.0.0 \
-    --rpc-send-retry-ms 100 \
     --enable-cpi-and-log-storage \
     --enable-rpc-transaction-history \
     --enable-rpc-bigtable-ledger-storage \
