@@ -192,20 +192,20 @@ sudo ufw enable
 
 sudo ufw allow ssh
 ```
-There are additional ports in prep for open source monitoring stack and other networking features. It is important to understand how UFW works and how to manage the attack surface of the machine. If you want to identify the ports solana needs (8000-8020) and reduce your attack surface by only enable those at this time please do. As Shadow Protocol evolves so will the port exposures and the need for awareness around those.
+There are additional ports in prep for open source monitoring stack and other networking features. It is important to understand how UFW works and how to manage the attack surface of the machine. If you want to identify the ports Solana needs (8000-8012) and reduce your attack surface by only enable those at this time please do. As Shadow Protocol evolves so will the port exposures and the need for awareness around those.
 
 Dump this entire command block for basic Shadow Node function:
 ```
-sudo ufw allow 53;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 8000:8020/tcp;sudo ufw allow 8000:8020/udp
+sudo ufw allow 53;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 8000:8012/udp
 ```
 These additional rules are in preparation for more Shadow Protocol features. Just drop this expanded rules block when there is a request from the team to expand ports:
 ```
-sudo ufw allow 53;sudo ufw allow 53/tcp;sudo ufw allow 53/udp;sudo ufw allow 8899;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 8900/udp;sudo ufw allow 8901/tcp;sudo ufw allow 8901/udp;sudo ufw allow 9900/udp;sudo ufw allow 9900/tcp;sudo ufw allow 9900;sudo ufw allow 8899/udp;sudo ufw allow 8900;sudo ufw allow 8000:8020/tcp;sudo ufw allow 8000:8020/udp
+sudo ufw allow 53;sudo ufw allow 8899;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 9900/udp;sudo ufw allow 9900/tcp;sudo ufw allow 9900;sudo ufw allow 8900;sudo ufw allow 8000:8012/udp
 ```
-# Install the Solana CLI! Don't forget to check for current version (1.8.12 as of 12/14/21)
+# Install the Solana CLI! Don't forget to check for current version (1.8.14 as of 02/16/2022)
 
 ```
-sh -c "$(curl -sSfL https://release.solana.com/v1.8.13/install)"
+sh -c "$(curl -sSfL https://release.solana.com/v1.8.14/install)"
 ```
 I will ask you to map the PATH just copy and paste the blow:
 ```
@@ -240,10 +240,10 @@ dump this into start-validator.sh:
 
 ```
 #!/bin/bash
-# v1.0 Shadow Node ( updated 01/21/2022)
-export SOLANA_METRICS_CONFIG=host=https://metrics.solana.com:8086,db=mainnet-beta,u=mainnet-beta_write,p=password
+# v1.5 Shadow Node ( updated 02/16/22)
 PATH=/home/sol/.local/share/solana/install/active_release/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
 export RUST_BACKTRACE=1
+export GOOGLE_APPLICATION_CREDENTIALS=/home/sol/solarchival-e261c1f6eff5.json
 exec solana-validator \
     --identity ~/validator-keypair.json \
     --entrypoint entrypoint.mainnet-beta.solana.com:8001 \
@@ -260,7 +260,7 @@ exec solana-validator \
     --known-validator DE1bawNcRJB9rVm3buyMVfr8mBEoyyu73NBovf2oXJsJ \
     --known-validator CakcnaRDHka2gXyfbEd2d3xsvkJkqsLw2akB3zsN1D2S \
     --rpc-port 8899 \
-    --dynamic-port-range 8002-8020 \
+    --dynamic-port-range 8002-8012 \
     --no-port-check \
     --gossip-port 8001 \
     --no-untrusted-rpc \
@@ -281,8 +281,11 @@ exec solana-validator \
     --log ~/log/solana-validator.log \
     --accounts /mt/solana-accounts \
     --ledger /mt/ledger/validator-ledger \
-    --limit-ledger-size 700000000 \
-    --rpc-pubsub-max-connections 1000 \
+    --limit-ledger-size 650000000 \
+    --rpc-send-default-max-retries 1 \
+    --rpc-send-retry-ms 2000 \
+    --rpc-send-service-max-retries 1 \
+    --account-index-exclude-key kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6 \
 
 ```
 save / exit (ctrl+s then ctrl+x)
