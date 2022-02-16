@@ -156,7 +156,7 @@ Connect to grafana by going to the IP of the server with port 3000:
 
 ```
 Example:
-http:1.2.3.4:3000
+http://1.2.3.4:3000
 ```
 Login with default credentials
 
