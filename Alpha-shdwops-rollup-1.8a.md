@@ -70,7 +70,7 @@ exec /root/tpu-traffic-classifier/tpu-traffic-classifier -config-file /root/tpu-
 ```
 make executable
 ```
-sudo chmod +x ~/start-tpu.sh
+sudo chmod +x ./start-tpu.sh
 ```
 create system service
 ```
