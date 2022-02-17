@@ -87,7 +87,7 @@ Check packet loss, NIC errors
 
 Flush IP tables and reset UFW with the following large command block (drop to root to do this) and restart afterwards:  
 
-`ufw disable;apt-get remove ufw;apt-get purge ufw;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT;iptables -F;iptables -X;iptables -Z ;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -t raw -F;iptables -t raw -X;apt update;apt upgrade;apt dist-upgrade;apt install ufw;ufw enable;ufw allow ssh;ufw allow 22;ufw allow 53;ufw allow 53/tcp;ufw allow 53/udp;ufw allow 8899;ufw allow 8899/tcp;ufw allow 8900/tcp;ufw allow 8900/udp;ufw allow 8901/tcp;ufw allow 8901/udp;ufw allow 9900/udp;ufw allow 9900/tcp;ufw allow 9900;ufw allow 8899/udp;ufw allow 8900;ufw allow 8000:8020/tcp;ufw allow 8000:8020/udp`
+`ufw disable;apt-get remove ufw;apt-get purge ufw;iptables -P INPUT ACCEPT;iptables -P FORWARD ACCEPT;iptables -P OUTPUT ACCEPT;iptables -F;iptables -X;iptables -Z ;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -t raw -F;iptables -t raw -X;apt update;apt upgrade;apt dist-upgrade;apt install ufw;ufw enable;ufw allow ssh;ufw allow 22;ufw allow 80;ufw allow 80/udp;ufw allow 80/tcp;ufw allow 53;ufw allow 53/tcp;ufw allow 53/udp;ufw allow 8899;ufw allow 8899/tcp;ufw allow 8900/tcp;ufw allow 8900/udp;ufw allow 8901/tcp;ufw allow 8901/udp;ufw allow 9900/udp;ufw allow 9900/tcp;ufw allow 9900;ufw allow 8899/udp;ufw allow 8900;ufw allow 8000:8020/tcp;ufw allow 8000:8020/udp`
 
 >**Explanation:**   
 Nodes can become unhealthy enough to being restarting all on their own (the Solana software will restart, not the physical machine). The system process `/etc/systemd/system/sol.service` has an automatic restart parameter so the node will try and reboot immediatley and get back to the tip. If you aren't around when this happens you have to filters logs to try and determine the cause. It could be that memory allocations are too low and the OOM (Out of memory killer) is coming after you. Or you could be encounter network disconnections. It's also possible it's as simple as you are on the wrong version of solana. Run through all the other troubleshooting problems and share your logs with the Shadow Ops discord channel to get help.
@@ -96,6 +96,8 @@ Nodes can become unhealthy enough to being restarting all on their own (the Sola
 ## How do I see how many clients are connected?
 
 **Technical:**  
+`cat /proc/sys/net/netfilter/nf_conntrack_count` - sum of all connections
+
 `netstat -s` all TCP and UDP conections  
 
 `netstat -an | grep ESTABLISHED | wc -l` - open ports that are established  

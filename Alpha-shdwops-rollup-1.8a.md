@@ -68,6 +68,10 @@ edit into file
 #! bin/bash
 exec /root/tpu-traffic-classifier/tpu-traffic-classifier -config-file /root/tpu-traffic-classifier/config.yml -our-localhost -tpu-policy DROP -fwd-policy DROP -update=false
 ```
+make executable
+```
+sudo chmod +x ~/start-tpu.sh
+```
 create system service
 ```
 nano /etc/systemd/system/tpublock.service
