@@ -123,10 +123,9 @@ Feb 16 07:55:59 h1 start-tpu.sh[43612]: 2022/02/16 07:55:59 not updating ipsets
 
 This txn batch is about 2 months old - should reuturn ~31 txns
 ```
-curl https://ssc-dao.genesysgo.net -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0","id": 1,"method": "getSignaturesForAddress","params":["FpmXqQ2JcJkp8etLGb2c68zntgiAofdXoexF1cTRyCdk",{"limit": 100}]}'
-
+curl http://localhost:8899 -k -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0","id": 1,"method": "getSignaturesForAddress","params":["FpmXqQ2JcJkp8etLGb2c68zntgiAofdXoexF1cTRyCdk",{"limit": 100}]}'
 ```
 This txn signatures is about 4 months old and gives back 1 signature
 ```
-curl https://ssc-dao.genesysgo.net -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0","id": 1,"method": "getSignaturesForAddress","params":["HcgKK53ik1yZwzD8UzdZUQV53fGUW9kveMPLTxFrSq8o",{"limit": 100}]}'
+curl http://localhost:8899 -k -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0","id": 1,"method": "getSignaturesForAddress","params":["HcgKK53ik1yZwzD8UzdZUQV53fGUW9kveMPLTxFrSq8o",{"limit": 100}]}'
 ```
