@@ -118,3 +118,15 @@ Feb 16 07:55:59 h1 start-tpu.sh[43612]: 2022/02/16 07:55:59 not updating ipsets
 ```
 #
 **These changes still need to be adding into the main configuration document for future Shadow Op onboarding. It is only partially complete at this time**
+#
+### **Testing the query for historical Transactions**  
+
+This txn batch is about 2 months old - should reuturn ~31 txns
+```
+curl https://ssc-dao.genesysgo.net -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0","id": 1,"method": "getSignaturesForAddress","params":["FpmXqQ2JcJkp8etLGb2c68zntgiAofdXoexF1cTRyCdk",{"limit": 100}]}'
+
+```
+This txn signatures is about 4 months old and gives back 1 signature
+```
+curl https://ssc-dao.genesysgo.net -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0","id": 1,"method": "getSignaturesForAddress","params":["HcgKK53ik1yZwzD8UzdZUQV53fGUW9kveMPLTxFrSq8o",{"limit": 100}]}'
+```
