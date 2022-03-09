@@ -6,7 +6,7 @@ IMPORTANT: This guide is specifically for Equinix Machines from the Solana Reser
 
 You must be running Ubuntu 20.04
 
-So you have your shiny new beast of a server. Let's make it a Shadow Operator RPC node.
+So you have your shiny new beast of a server. Let's make it a Shadow Operator RPC Node.
 
 First things first - OS security updates
 ```
