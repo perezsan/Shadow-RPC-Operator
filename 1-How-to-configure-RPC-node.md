@@ -2,7 +2,7 @@
 
 Make sure and check out the START-HERE document.
 
-IMPORTANT: This guide is specifically for Equinix Machines from the Solana Reserve pool accessed through he Solana Foundation Server Program. https://solana.foundation/server-program
+IMPORTANT: This guide is specifically for Equinix Machines from the Solana Reserve pool accessed through the Solana Foundation Server Program. https://solana.foundation/server-program
 
 You must be running Ubuntu 20.04
 
@@ -11,7 +11,9 @@ So you have your shiny new beast of a server. Let's make it a Shadow Operator RP
 First things first - OS security updates
 ```
 apt update
+
 apt upgrade
+
 apt dist-upgrade
 ```
 create user sol
@@ -22,7 +24,6 @@ adduser sol
 usermod -aG sudo sol
 
 su - sol
-
 ```
 
 **Hostname Creation**
@@ -51,20 +52,14 @@ Enter the "n" then hit enter
 Etner the "1" then hit enter...and so on
 ```
 sudo gdisk /dev/nvme0n1
-n, 1, p, 2048, [max secor available], 8300, p, w
+n, 1, enter (2048 default first sector), +3000G, enter (8300 default), n, 2, enter (default first available sector), enter (max sector available), 8200, w, y
 ```
-note the first step in the next section is deleting the partition we just created above
-```
-sudo fdisk /dev/nvme0n1
-d, n, 1 or 2, default sector, +3000GB, n, 1 or 2, default sector, +420GB, w
-```
+
 Now make filessytems, directories, delete and make new swap, etc.
 ```
 sudo fdisk -l 
 
 sudo mkfs -t ext4 /dev/nvme0n1p1
-
-sudo mkfs -t ext4 /dev/nvme0n1p2
 
 sudo mkdir /mnt/
 

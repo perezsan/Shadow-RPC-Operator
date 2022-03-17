@@ -10,7 +10,7 @@ This guide is currently intended only for setting up servers from the [Solana Se
 
 **IMPORTANT:** We are currently in alpha testing of Shadow Node Operators. Please reach out to a team member of GenesysGo to express interest in being an alpha tester. During this short phase of testing, there is no active $SHDW token reward emission (as the IDO has not yet occurred). Additionally, we may often make the request that machines be turned off or removed for adjustments. This is a volunteer alpha phase and we appreciate anyone willing to help contribute their time and resources.
 
-**UPDATE** 12/22 - Alpha testing pool is closed for a short period while we manage through the IDO process.
+**UPDATE** 03/10 - Alpha testing pool is closed for a short period while we build out both the protocol that oversees the shadow nodes as well as the shadow drive integrations.
 
 **HARDWARE CONSIDERATIONS**
 A Solana Shadow Node has similar hardware requirements to the Solana RPC with the addition of additional storage capacity. This will change over time as the Shadow Protocol evolves. These hardware details below are for **early alpha Shadow Nodes and the following beta Shadow Nodes**
@@ -18,19 +18,19 @@ A Solana Shadow Node has similar hardware requirements to the Solana RPC with th
 If you are utilizing the Solana Server Program for your hardware, please make sure you have two larger drives as detailed below:
 
 Minimums from Solana Server Program:
-*  CPU - 24 core, 2.8GHZ, AVX2 support (Prefer 3.0GHZ+)
+*  CPU - 24 core, 2.8GHZ, AVX2 support (Prefer 3.0GHZ+ native), must boost above 3ghz
 *  RAM - 256GB
 *  HD  x 3
        - Boot - 200GB SSD
        - Ledger - 3.8TB NVME
        - Storage - 3.8TB NVME or SSD
 *  NIC - 10gig
-*  Connection - 500MB/s symmetrical
+*  Connection - 1GB/s symmetrical
 
-Custom Builders see above minimums or the below general guidance. These are generalizations and subject to change. They have 
+Custom Builders see above minimums or the below general guidance. These are generalizations and subject to change.
 # Operating a Shadow Node
 
-This resource has a step by step guide of:
+This resource has a step by step guide covering:
 1) [Configuring a Shadow Node](https://github.com/Shadowy-Super-Coder-DAO/Shadow-RPC-Operator/blob/main/1-How-to-configure-RPC-node.md)
 2) [Connecting](https://github.com/Shadowy-Super-Coder-DAO/Shadow-RPC-Operator/blob/main/2-How-to-connect-to-network.md) the Shadow Node to the `SSC-DAO Shadow Network`
 3) [Maintaining](https://github.com/Shadowy-Super-Coder-DAO/Shadow-RPC-Operator/blob/main/3-how-to-maintain-rpc-node.md) your Shadow Node for maximum rewards payouts
