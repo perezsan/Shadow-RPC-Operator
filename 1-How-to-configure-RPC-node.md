@@ -44,38 +44,27 @@ You can set your hostname with the following command:
 ```sudo hostnamectl set-hostname newNameHere``` 
 
 Partition hard drive for RPC
-Partition NVME into 420gb (swap) and 3000gb (ledger and accounts)
+Partition NVME into 420gb (swap) and ~3000gb (ledger and accounts)
 
-adding new process using GPT partition with gdisk for larger filessytems. Make larger 3.5 (or 3.8) TB drive via gdisk then partition using fdisk as normal. You have to delete the original GPT in order to select partition 1 with fdisk
+Utilize gdisk to create the swap partition (nvme0n1p2) first, and then take the remaining space for the ledger partition (nvme0n1p1)
 
-Enter the "n" then hit enter
-Etner the "1" then hit enter...and so on
+Hit `enter` after each entry, or `enter` where it says "enter" :)
 ```
 sudo gdisk /dev/nvme0n1
-n, 1, enter (2048 default first sector), +3000G, enter (8300 default), n, 2, enter (default first available sector), enter (max sector available), 8200, w, y
+n, 2, enter (default first sector), +420G, 8200 (linux swap), n, 1, enter (first available sector), enter (max sector available), 8300, w, y
 ```
 
-Now make filessytems, directories, delete and make new swap, etc.
+Now make filessytems, directories, delete and make new swap, etc:
 ```
 sudo fdisk -l 
 
 sudo mkfs -t ext4 /dev/nvme0n1p1
 
-sudo mkdir /mnt/
+sudo mount /dev/nvme0n1p1 /mt
 
-sudo mkdir /mnt/ramdrive
-
-sudo mkdir /mt/
-
-sudo mkdir /mt/ledger
-
-sudo mkdir /mt/ledger/validator-ledger
-
-sudo mkdir /mt/solana-accounts
-
-sudo mkdir ~/log
+sudo mkswap /dev/nvme0n1p2
 ```
-Discover the swap directory, turn it off, make a new one and turn it on
+Discover the swap directory, turn it off, turn on the new swap partition:
 ```
 sudo swapon --show
 
@@ -88,27 +77,15 @@ It will almost always be the one showig 1.9GB of swap size
 ```
 sudo swapoff /dev/sda2
 
-sudo sed --in-place '/swap.img/d' /etc/fstab
-
-sudo mount /dev/nvme0n1p2 /mnt/
-
-sudo mount /dev/nvme0n1p1 /mt
-
-sudo dd if=/dev/zero of=/mnt/swapfile bs=1M count=350k
 ```
-It can take up to 5 minutes for the machine to make this size swapfile. Sit tight.
+Next is editing the swappiness to 30 and turning our new swap partition on..
 
-Next is setting permissions and adding the swapfile to fstab, then edit the swapiness to 30.
 ```
-sudo chmod 600 /mnt/swapfile
-
-sudo mkswap /mnt/swapfile
-
 echo 'vm.swappiness=30' | sudo tee --append /etc/sysctl.conf > /dev/null
 
 sudo sysctl -p
 
-sudo swapon --all --verbose
+sudo swapon /dev/nvme0n1p2
 ```
 Capture nvme0n1p1 and nvme0n1p2 UUIDs to edit into /etc/fstab
 
@@ -117,69 +94,67 @@ Let's take a look at the file first to get an idea of what is needed here.
 sudo nano /etc/fstab
 ```
 You should see something similar to this:
+```
 UUID=e6eafc79-85c3-4208-82ac-41b73d75cd31       /       ext4    errors=remount-ro       0       1
 UUID=4b8f8a7b-8b8f-4984-a341-5770f8b365a1       none    swap    none    0       0
-
+```
 These are the default OS drives and should be left alone. Do not overwrite them. You will need to add the two new UUID's of the two partitions you just made (nvmeon1p1 and nvme0n1p2).
 
 ```
 lsblk -f
 ```
-Copy the section that looks similar to the below nvme0n1 partition tree and past it into a notepad (or VScode, etc) so that you can copy/past into fstab properly. We just need the UUID's so in the example below copy "5c24e241-239c-4aa5-baa6-fbb6fb44a847" and "87645b08-85c2-4fe2-9974-1bda4de317d9" and note which partition each belongs to (/mt and /mnt respectively). Your UUIDs will be different!
+Copy the section that looks similar to the below nvme0n1 partition tree and paste it into a notepad (or VScode, etc) so that you can copy/paste into fstab properly. We just need the UUID's so in the example below copy "5c24e241-239c-4aa5-baa6-fbb6fb44a847" and "87645b08-85c2-4fe2-9974-1bda4de317d9" and note which partition each belongs to (/mt and swap respectively). Your UUIDs will be different! DO NOT COPY THESE DIRECTLY FROM THIS GUIDE!
 ```
 nvme0n1
 ├─nvme0n1p1 ext4         5c24e241-239c-4aa5-baa6-fbb6fb44a847    2.8T     0% /mt
-└─nvme0n1p2 ext4         87645b08-85c2-4fe2-9974-1bda4de317d9    9.5G    88% /mnt
+└─nvme0n1p2 swap    1    87645b08-85c2-4fe2-9974-1bda4de317d9                [SWAP]
 ```
 These UUID above need to be edited into the fstab config below
 ```
 sudo nano /etc/fstab
 ```
-dump this into fstab below the current UUIDs. delete or hash out the old swap UUID if needed. Leave the first UUIDs (OS related), just **append these lines under whatever current UUIDs are listed** as the ones already in the file are boot/OS related.
-also make sure UUID is correct as they can change
+Leave the first UUID alone (OS related), on the swap partition line, while your UUID values will be different, edit the existing one to have the UUID of your swap partition from the step above.
 
-Once you update the UUIDs below (which are just examples) to the ones you gathered from your machine, paste this into the fstab file mentioned above **underneath the existing file entries**.
 ```
-#GenesysGo RPC config
+UUID=87645b08-85c2-4fe2-9974-1bda4de317d9       none    swap    none    0       0
+```
+Now append these lines under whatever current UUIDs are listed as the ones already in the file are boot/OS related. also make sure UUID is correct as they can change:
+```
+#GenesysGo RPC Config
 UUID=5c24e241-239c-4aa5-baa6-fbb6fb44a847 /mt  auto nosuid,nodev,nofail 0 0
-UUID=87645b08-85c2-4fe2-9974-1bda4de317d9 /mnt  auto nosuid,nodev,nofail 0 0
-#ramdrive and swap
-#tmpfs /mnt/ramdrive tmpfs rw,size=50G 0 0
-/mnt/swapfile none swap sw 0 0
 ```
-save / exit
-ctrl+s, ctrl+x
 
-But Wait - what was that ramdrive and tmpfs stuff? Leave it for now. That is an performance enhancement option that will be covered in later documentation. In short, it's for running the solana-accounts inside the memory of the server versus on the hard drive. More on this later.
+save / exit
+`ctrl+o` enter `ctrl+x`
 
 The complete file should look like this (but with your own UUIDs):
 ```
 UUID=e6eafc79-85c3-4208-82ac-41b73d75cd31       /       ext4    errors=remount-ro       0       1
-UUID=4b8f8a7b-8b8f-4984-a341-5770f8b365a1       none    swap    none    0       0
-#GenesysGo RPC config
+UUID=37215cf2-244c-4f2e-98f9-6f327694fe7e       none    swap    none    0       0
+#GenesysGo RPC Config
 UUID=5c24e241-239c-4aa5-baa6-fbb6fb44a847 /mt  auto nosuid,nodev,nofail 0 0
-UUID=87645b08-85c2-4fe2-9974-1bda4de317d9 /mnt  auto nosuid,nodev,nofail 0 0
-#ramdrive and swap
-#tmpfs /mnt/ramdrive tmpfs rw,size=60G 0 0
-/mnt/swapfile none swap sw 0 0
-now edit permissions and make sure user sol is the owner for solana directories
 ```
-
-```
-sudo chown sol:sol /mt/solana-accounts
-
-sudo chown sol:sol /mt/ledger
-
-sudo chown sol:sol ~/log
-
-sudo chown sol:sol /mt/ledger/validator-ledger
-```
-Mount everything.
+Now make sure everything is mounted:
 ```
 sudo mount --all --verbose
 ```
 
+Finish making directories and setting permissions:
+
+```
+sudo mkdir -p /mt/ledger/validator-ledger
+
+sudo mkdir -p /mt/accounts/solana-accounts
+
+sudo mkdir ~/log
+
+sudo chown -R sol:sol /mt/*
+
+sudo chown sol:sol ~/log
+
+```
 Set up the firewall / ssh
+
 ```
 sudo snap install ufw
 
@@ -202,7 +177,7 @@ sudo ufw allow 53;sudo ufw allow 8899;sudo ufw allow 8899/tcp;sudo ufw allow 890
 ```
 sh -c "$(curl -sSfL https://release.solana.com/v1.8.14/install)"
 ```
-I will ask you to map the PATH just copy and paste the blow:
+It will ask you to map the PATH just copy and paste the below:
 ```
 export PATH="/home/sol/.local/share/solana/install/active_release/bin:$PATH"
 ```
@@ -213,7 +188,7 @@ solana-gossip spy --entrypoint entrypoint.mainnet-beta.solana.com:8001
 ```
 If your machine is gossiping without any errors it can be spun up on the mainnet to start reading the chain data.
 
-exit gossip with ctrl + c
+Exit gossip with `ctrl + c`
 
 Now create keys.
 
@@ -225,13 +200,13 @@ solana config set --keypair ~/validator-keypair.json
 
 solana-keygen new -o ~/vote-account-keypair.json
 ```
-making system services (sol.service and systuner.service) and the startup script.
+Making system services (sol.service and systuner.service) and the startup script.
 
-this is the solana-validator start up shell script which the system service (sol.service) will reference
+This is the solana-validator start up shell script which the system service (sol.service) will reference
 ```
 sudo nano ~/start-validator.sh
 ```
-dump this into start-validator.sh:
+Edit this into start-validator.sh:
 
 ```
 #!/bin/bash
@@ -255,7 +230,7 @@ exec solana-validator \
     --known-validator DE1bawNcRJB9rVm3buyMVfr8mBEoyyu73NBovf2oXJsJ \
     --known-validator CakcnaRDHka2gXyfbEd2d3xsvkJkqsLw2akB3zsN1D2S \
     --rpc-port 8899 \
-    --dynamic-port-range 8002-8012 \
+    --dynamic-port-range 8002-8020 \
     --no-port-check \
     --gossip-port 8001 \
     --no-untrusted-rpc \
@@ -274,16 +249,16 @@ exec solana-validator \
     --wal-recovery-mode skip_any_corrupted_record \
     --vote-account ~/vote-account-keypair.json \
     --log ~/log/solana-validator.log \
-    --accounts /mt/solana-accounts \
+    --accounts /mt/accounts/solana-accounts \
     --ledger /mt/ledger/validator-ledger \
-    --limit-ledger-size 650000000 \
+    --limit-ledger-size 500000000 \
     --rpc-send-default-max-retries 1 \
     --rpc-send-retry-ms 2000 \
     --rpc-send-service-max-retries 1 \
     --account-index-exclude-key kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6 \
 
 ```
-save / exit (ctrl+s then ctrl+x)
+Save / exit `ctrl+0` then `ctrl+x`
 
 Make this shell file executable.
 ```
@@ -297,7 +272,7 @@ Create the Solana system service - sol.service (run on boot, auto-restart when s
 ```
 sudo nano /etc/systemd/system/sol.service
 ```
-Dump this into file:
+Edit this into file:
 ```
 [Unit]
 Description=Solana Validator
@@ -319,13 +294,13 @@ ExecStart=/home/sol/start-validator.sh
 [Install]
 WantedBy=multi-user.target
 ```
-save/exit (ctrl+s then ctrl+x)
+Save / exit `ctrl+0` then `ctrl+x`
 
 Make system tuner service - systuner.service
 ```
 sudo nano /etc/systemd/system/systuner.service
 ```
-Dump this into file:
+Edit this into file:
 ```
 [Unit]
 Description=Solana System Tuner
@@ -339,6 +314,8 @@ ExecStart=/home/sol/.local/share/solana/install/active_release/bin/solana-sys-tu
 [Install]
 WantedBy=multi-user.target
 ```
+Save / exit `ctrl+0` then `ctrl+x`
+
 Reload the system services
 ```
 sudo systemctl daemon-reload
@@ -347,7 +324,8 @@ Create log rotation for ~/log/solana-validator.log
 ```
 sudo nano /etc/logrotate.d/solana
 ```
-dump this into file:
+Edit this into file:
+
 ```
 /home/sol/log/solana-validator.log {
   su sol sol
@@ -359,12 +337,14 @@ dump this into file:
   endscript
 }
 ```
+Save / exit `ctrl+0` then `ctrl+x`
+
 Reset log rotate
 ```
 sudo systemctl restart logrotate
 ```
 
-Set CPU to performance mode (careful with this if you are adapting these configs to different hardware)
+Set CPU to performance mode (YMMV with Equinix hardware - careful with this if you are adapting these configs to different hardware!!)
 ```
 sudo apt-get install cpufrequtils
 
@@ -372,17 +352,17 @@ echo 'GOVERNOR="performance"' | sudo tee /etc/default/cpufrequtils
 
 sudo systemctl disable ondemand
 ```
-modifications to sysctl.conf
+Modifications to sysctl.conf
 ```
 sudo nano /etc/sysctl.conf
 ```
-edit into bottom of file
+
+Edit into bottom of file
 
 ```
 # other tunings suggested by Triton One
 # sysctl_optimisations:
 vm.max_map_count=1000000
-vm.swappiness=20
 kernel.hung_task_timeout_secs=300
 vm.stat_interval=10
 vm.dirty_ratio=40
@@ -400,6 +380,7 @@ net.core.rmem_default=134217728
 net.core.wmem_max=134217728
 net.core.wmem_default=134217728
 ```
+Save / exit `ctrl+0` then `ctrl+x`
 
 # Start up and test the Shadow Node
 
