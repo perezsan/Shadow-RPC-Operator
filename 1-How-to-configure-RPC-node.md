@@ -6,7 +6,7 @@ IMPORTANT: This guide is specifically for Equinix Machines from the Solana Reser
 
 You must be running Ubuntu 20.04
 
-So you have your shiny new beast of a server. Let's make it a Shadow Operator RPC.
+So you have your shiny new beast of a server. Let's make it a Shadow Operator RPC Node.
 
 First things first - OS security updates
 ```
@@ -28,7 +28,7 @@ su - sol
 
 **Hostname Creation**
 
-In order for the shadow network to accept your machine, you need to set your hostname with the following parameters:
+In order for the Shadow Network to accept your machine, you need to set your hostname with the following parameters:
 
 **You must use the following for your hostname or your request to join the network will be rejected**:
 
@@ -49,7 +49,7 @@ Partition NVME into 420gb (swap) and 3000gb (ledger and accounts)
 adding new process using GPT partition with gdisk for larger filessytems. Make larger 3.5 (or 3.8) TB drive via gdisk then partition using fdisk as normal. You have to delete the original GPT in order to select partition 1 with fdisk
 
 Enter the "n" then hit enter
-Etner the "1" then hit enter...and so on
+Enter the "1" then hit enter...and so on
 ```
 sudo gdisk /dev/nvme0n1
 n, 1, enter (2048 default first sector), +3000G, enter (8300 default), n, 2, enter (default first available sector), enter (max sector available), 8200, w, y
@@ -150,7 +150,7 @@ UUID=87645b08-85c2-4fe2-9974-1bda4de317d9 /mnt  auto nosuid,nodev,nofail 0 0
 save / exit
 ctrl+s, ctrl+x
 
-But Wait - what was that ramdrive and tmpfs stuff? Leave it for now. That is an performance enhancement option that will be covered in later documentation. In short, it's for running the solana-accounts inside the memory of the server versus on the hard drive. More on this later.
+But wait - what was that ramdrive and tmpfs stuff? Leave it for now. That is an performance enhancement option that will be covered in later documentation. In short, it's for running the solana-accounts inside the memory of the server versus on the hard drive. More on this later.
 
 The complete file should look like this (but with your own UUIDs):
 ```
@@ -202,7 +202,7 @@ sudo ufw allow 53;sudo ufw allow 8899;sudo ufw allow 8899/tcp;sudo ufw allow 890
 ```
 sh -c "$(curl -sSfL https://release.solana.com/v1.8.14/install)"
 ```
-I will ask you to map the PATH just copy and paste the blow:
+It will ask you to map the PATH just copy and paste the command below:
 ```
 export PATH="/home/sol/.local/share/solana/install/active_release/bin:$PATH"
 ```
@@ -437,7 +437,7 @@ curl http://localhost:8899 -k -X POST -H "Content-Type: application/json" -d '
 '
 ```
 
-Please see [shadow_monitoring](./Shadow-RPC-Operator/shadow_monitoring/README.md) for a guide on settin uo your own observability stack. This allows you to view your Shadow RPC Node's metrics (hardware health, network health, etc.).
+Please see [shadow_monitoring](./shadow_monitoring/README.md) for a guide on setting up your own observability stack. This allows you to view your Shadow RPC Node's metrics (hardware health, network health, etc.).
 
 
 Tracking root slot
