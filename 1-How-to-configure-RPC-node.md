@@ -6,7 +6,7 @@ IMPORTANT: This guide is specifically for Equinix Machines from the Solana Reser
 
 You must be running Ubuntu 20.04
 
-So you have your shiny new beast of a server. Let's make it a Shadow Operator RPC.
+So you have your shiny new beast of a server. Let's make it a Shadow Operator RPC Node.
 
 First things first - OS security updates
 ```
@@ -28,7 +28,7 @@ su - sol
 
 **Hostname Creation**
 
-In order for the shadow network to accept your machine, you need to set your hostname with the following parameters:
+In order for the Shadow Network to accept your machine, you need to set your hostname with the following parameters:
 
 **You must use the following for your hostname or your request to join the network will be rejected**:
 
@@ -49,6 +49,7 @@ Partition NVME into 420gb (swap) and ~3000gb (ledger and accounts)
 Utilize gdisk to create the swap partition (nvme0n1p2) first, and then take the remaining space for the ledger partition (nvme0n1p1)
 
 Hit `enter` after each entry, or `enter` where it says "enter" :)
+
 ```
 sudo gdisk /dev/nvme0n1
 n, 2, enter (default first sector), +420G, 8200 (linux swap), n, 1, enter (first available sector), enter (max sector available), 8300, w, y
@@ -123,7 +124,6 @@ Now append these lines under whatever current UUIDs are listed as the ones alrea
 #GenesysGo RPC Config
 UUID=5c24e241-239c-4aa5-baa6-fbb6fb44a847 /mt  auto nosuid,nodev,nofail 0 0
 ```
-
 save / exit
 `ctrl+o` enter `ctrl+x`
 
@@ -177,7 +177,9 @@ sudo ufw allow 53;sudo ufw allow 8899;sudo ufw allow 8899/tcp;sudo ufw allow 890
 ```
 sh -c "$(curl -sSfL https://release.solana.com/v1.8.14/install)"
 ```
-It will ask you to map the PATH just copy and paste the below:
+
+It will ask you to map the PATH just copy and paste the command below:
+
 ```
 export PATH="/home/sol/.local/share/solana/install/active_release/bin:$PATH"
 ```
@@ -418,7 +420,7 @@ curl http://localhost:8899 -k -X POST -H "Content-Type: application/json" -d '
 '
 ```
 
-Please see [shadow_monitoring](./Shadow-RPC-Operator/shadow_monitoring/README.md) for a guide on settin uo your own observability stack. This allows you to view your Shadow RPC Node's metrics (hardware health, network health, etc.).
+Please see [shadow_monitoring](./shadow_monitoring/README.md) for a guide on setting up your own observability stack. This allows you to view your Shadow RPC Node's metrics (hardware health, network health, etc.).
 
 
 Tracking root slot
