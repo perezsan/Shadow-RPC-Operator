@@ -102,11 +102,11 @@ If you need to add a user to the docker group that you’re not logged in as, de
 
 To make sure we obtain the most updated stable version of Docker Compose, we’ll download this software from its official Github repository.
 
-First, confirm the latest version available in their releases page. At the time of this writing, the most current stable version is 2.2.2.
+First, confirm the latest version available in their releases page. At the time of this writing, the most current stable version is 2.3.4.
 
 The following command will download the 2.2.2 release and save the executable file at /usr/local/bin/docker-compose, which will make this software globally accessible as docker-compose:
 
-```sudo curl -L "https://github.com/docker/compose/releases/download/v2.2.2/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose```
+```sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.4/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose```
  
 Next, set the correct permissions so that the docker-compose command is executable:
 
