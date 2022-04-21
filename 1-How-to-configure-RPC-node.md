@@ -242,6 +242,7 @@ exec solana-validator \
 --account-index program-id \
 --account-index spl-token-owner \
 --account-index spl-token-mint \
+--enable-rpc-transaction-history
 --no-duplicate-instance-check \
 --wal-recovery-mode skip_any_corrupted_record \
 --vote-account ~/vote-account-keypair.json \
