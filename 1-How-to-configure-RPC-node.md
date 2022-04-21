@@ -172,10 +172,10 @@ These additional rules are in preparation for more Shadow Protocol features. Jus
 ```
 sudo ufw allow 53;sudo ufw allow 8899;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 9900/udp;sudo ufw allow 9900/tcp;sudo ufw allow 9900;sudo ufw allow 8900;sudo ufw allow 8000:8012/udp
 ```
-# Install the Solana CLI! Don't forget to check for current version (1.8.14 as of 02/16/2022)
+# Install the Solana CLI! Don't forget to check for current version (1.0.16 as of 04/20/2022)
 
 ```
-sh -c "$(curl -sSfL https://release.solana.com/v1.8.14/install)"
+sh -c "$(curl -sSfL https://release.solana.com/v1.9.16/install)"
 ```
 
 It will ask you to map the PATH just copy and paste the command below:
@@ -212,53 +212,51 @@ Edit this into start-validator.sh:
 
 ```
 #!/bin/bash
-# v1.5 Shadow Node ( updated 02/16/22)
 PATH=/home/sol/.local/share/solana/install/active_release/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
 export RUST_BACKTRACE=1
-export GOOGLE_APPLICATION_CREDENTIALS=/home/sol/solarchival-e261c1f6eff5.json
+export RUST_LOG=solana=info
 exec solana-validator \
-    --identity ~/validator-keypair.json \
-    --entrypoint entrypoint.mainnet-beta.solana.com:8001 \
-    --entrypoint entrypoint2.mainnet-beta.solana.com:8001 \
-    --entrypoint entrypoint3.mainnet-beta.solana.com:8001 \
-    --entrypoint entrypoint4.mainnet-beta.solana.com:8001 \
-    --entrypoint entrypoint5.mainnet-beta.solana.com:8001 \
-    --known-validator 7cVfgArCheMR6Cs4t6vz5rfnqd56vZq4ndaBrY5xkxXy \
-    --known-validator DDnAqxJVFo2GVTujibHt5cjevHMSE9bo8HJaydHoshdp \
-    --known-validator Ninja1spj6n9t5hVYgF3PdnYz2PLnkt7rvaw3firmjs \
-    --known-validator wWf94sVnaXHzBYrePsRUyesq6ofndocfBH6EmzdgKMS \
-    --known-validator 7Np41oeYqPefeNQEHSv1UDhYrehxin3NStELsSKCT4K2 \
-    --known-validator GdnSyH3YtwcxFvQrVVJMm1JhTS4QVX7MFsX56uJLUfiZ \
-    --known-validator DE1bawNcRJB9rVm3buyMVfr8mBEoyyu73NBovf2oXJsJ \
-    --known-validator CakcnaRDHka2gXyfbEd2d3xsvkJkqsLw2akB3zsN1D2S \
-    --rpc-port 8899 \
-    --dynamic-port-range 8002-8020 \
-    --no-port-check \
-    --gossip-port 8001 \
-    --no-untrusted-rpc \
-    --no-voting \
-    --private-rpc \
-    --rpc-bind-address 0.0.0.0 \
-    --enable-cpi-and-log-storage \
-    --enable-rpc-transaction-history \
-    --enable-rpc-bigtable-ledger-storage \
-    --rpc-bigtable-timeout 300 \
-    --account-index program-id \
-    --account-index spl-token-owner \
-    --account-index spl-token-mint \
-    --rpc-pubsub-enable-vote-subscription \
-    --no-duplicate-instance-check \
-    --wal-recovery-mode skip_any_corrupted_record \
-    --vote-account ~/vote-account-keypair.json \
-    --log ~/log/solana-validator.log \
-    --accounts /mt/accounts/solana-accounts \
-    --ledger /mt/ledger/validator-ledger \
-    --limit-ledger-size 500000000 \
-    --rpc-send-default-max-retries 1 \
-    --rpc-send-retry-ms 2000 \
-    --rpc-send-service-max-retries 1 \
-    --account-index-exclude-key kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6 \
-
+--identity ~/validator-keypair.json \
+--entrypoint entrypoint.mainnet-beta.solana.com:8001 \
+--entrypoint entrypoint2.mainnet-beta.solana.com:8001 \
+--entrypoint entrypoint3.mainnet-beta.solana.com:8001 \
+--entrypoint entrypoint4.mainnet-beta.solana.com:8001 \
+--entrypoint entrypoint5.mainnet-beta.solana.com:8001 \
+--known-validator 7cVfgArCheMR6Cs4t6vz5rfnqd56vZq4ndaBrY5xkxXy \
+--known-validator DDnAqxJVFo2GVTujibHt5cjevHMSE9bo8HJaydHoshdp \
+--known-validator Ninja1spj6n9t5hVYgF3PdnYz2PLnkt7rvaw3firmjs \
+--known-validator wWf94sVnaXHzBYrePsRUyesq6ofndocfBH6EmzdgKMS \
+--known-validator 7Np41oeYqPefeNQEHSv1UDhYrehxin3NStELsSKCT4K2 \
+--known-validator GdnSyH3YtwcxFvQrVVJMm1JhTS4QVX7MFsX56uJLUfiZ \
+--known-validator DE1bawNcRJB9rVm3buyMVfr8mBEoyyu73NBovf2oXJsJ \
+--known-validator CakcnaRDHka2gXyfbEd2d3xsvkJkqsLw2akB3zsN1D2S \
+--rpc-port 8899 \
+--dynamic-port-range 8002-8020 \
+--no-port-check \
+--gossip-port 8001 \
+--no-untrusted-rpc \
+--no-voting \
+--private-rpc \
+--rpc-bind-address 0.0.0.0 \
+--enable-cpi-and-log-storage \
+--account-index program-id \
+--account-index spl-token-owner \
+--account-index spl-token-mint \
+--no-duplicate-instance-check \
+--wal-recovery-mode skip_any_corrupted_record \
+--vote-account ~/vote-account-keypair.json \
+--log ~/log/solana-validator.log \
+--accounts /mt/accounts/solana-accounts \
+--ledger /mt/ledger/validator-ledger \
+--limit-ledger-size 400000000 \
+--rpc-send-default-max-retries 3 \
+--rpc-send-service-max-retries 3 \
+--rpc-send-retry-ms 2000 \
+--full-rpc-api \
+--accounts-index-memory-limit-mb 100 \
+--accounts-db-cache-limit-mb 50 \
+--accounts-index-scan-results-limit-mb 30 \
+--account-index-exclude-key kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6 \
 ```
 Save / exit `ctrl+0` then `ctrl+x`
 
@@ -362,20 +360,38 @@ sudo nano /etc/sysctl.conf
 Edit into bottom of file
 
 ```
-# other tunings suggested by Triton One
-# sysctl_optimisations:
+# set minimum, default, and maximum tcp buffer sizes (10k, 87.38k (linux default), 12M resp)
+net.ipv4.tcp_rmem=10240 87380 12582912
+net.ipv4.tcp_wmem=10240 87380 12582912
+# Enable TCP westwood for kernels greater than or equal to 2.6.13
+net.ipv4.tcp_congestion_control=westwood
+net.ipv4.tcp_fastopen=3
+net.ipv4.tcp_timestamps=0
+net.ipv4.tcp_sack=1
+net.ipv4.tcp_low_latency=1
+# Enable fast recycling TIME-WAIT sockets
+net.ipv4.tcp_tw_recycle = 1
+# don't cache ssthresh from previous connection
+net.ipv4.tcp_no_metrics_save = 1
+net.ipv4.tcp_moderate_rcvbuf = 1
+
+# kernel Tunes
+kernel.timer_migration=0
+kernel.hung_task_timeout_secs=30
+# A suggested value for pid_max is 1024 * <# of cpu cores/threads in system>
+kernel.pid_max=49152
+
+# vm.tuning
+vm.swappiness=30
 vm.max_map_count=1000000
-kernel.hung_task_timeout_secs=300
 vm.stat_interval=10
 vm.dirty_ratio=40
 vm.dirty_background_ratio=10
+vm.min_free_kbytes = 3000000
 vm.dirty_expire_centisecs=36000
 vm.dirty_writeback_centisecs=3000
 vm.dirtytime_expire_seconds=43200
-kernel.timer_migration=0
-# A suggested value for pid_max is 1024 * <# of cpu cores/threads in system>
-kernel.pid_max=49152
-net.ipv4.tcp_fastopen=3
+
 # solana systuner
 net.core.rmem_max=134217728
 net.core.rmem_default=134217728
