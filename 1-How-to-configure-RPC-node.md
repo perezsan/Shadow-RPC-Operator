@@ -172,7 +172,7 @@ These additional rules are in preparation for more Shadow Protocol features. Jus
 ```
 sudo ufw allow 53;sudo ufw allow 8899;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 9900/udp;sudo ufw allow 9900/tcp;sudo ufw allow 9900;sudo ufw allow 8900;sudo ufw allow 8000:8012/udp
 ```
-# Install the Solana CLI! Don't forget to check for current version (1.0.16 as of 04/20/2022)
+# Install the Solana CLI! Don't forget to check for current version (1.9.16 as of 04/20/2022)
 
 ```
 sh -c "$(curl -sSfL https://release.solana.com/v1.9.16/install)"
