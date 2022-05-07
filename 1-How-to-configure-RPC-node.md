@@ -16,7 +16,7 @@ apt upgrade
 
 apt dist-upgrade
 ```
-create user sol
+Create user sol
 
 ```
 adduser sol
@@ -162,20 +162,17 @@ sudo ufw enable
 
 sudo ufw allow ssh
 ```
-There are additional ports in prep for open source monitoring stack and other networking features. It is important to understand how UFW works and how to manage the attack surface of the machine. If you want to identify the ports Solana needs (8000-8012) and reduce your attack surface by only enable those at this time please do. As Shadow Protocol evolves so will the port exposures and the need for awareness around those.
+There are additional ports in prep for open source monitoring stack and other networking features. It is important to understand how UFW works and how to manage the attack surface of the machine. If you want to identify the ports Solana needs (8000-8020) and reduce your attack surface by only enable those at this time please do. As Shadow Protocol evolves so will the port exposures and the need for awareness around those.
 
 Dump this entire command block for basic Shadow Node function:
 ```
-sudo ufw allow 53;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 8000:8012/udp
+sudo ufw allow 53;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 8000:8020/udp
 ```
-These additional rules are in preparation for more Shadow Protocol features. Just drop this expanded rules block when there is a request from the team to expand ports:
-```
-sudo ufw allow 53;sudo ufw allow 8899;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 9900/udp;sudo ufw allow 9900/tcp;sudo ufw allow 9900;sudo ufw allow 8900;sudo ufw allow 8000:8012/udp
-```
-# Install the Solana CLI! Don't forget to check for current version (1.9.16 as of 04/20/2022)
+
+## Install the Solana CLI and don't forget to check for current version (1.9.20 as of 05/05/2022)
 
 ```
-sh -c "$(curl -sSfL https://release.solana.com/v1.9.16/install)"
+sh -c "$(curl -sSfL https://release.solana.com/v1.9.20/install)"
 ```
 
 It will ask you to map the PATH just copy and paste the command below:
@@ -256,10 +253,16 @@ exec solana-validator \
 --full-rpc-api \
 --accounts-index-memory-limit-mb 100 \
 --accounts-db-cache-limit-mb 50 \
---accounts-index-scan-results-limit-mb 30 \
 --account-index-exclude-key kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6 \
 ```
 Save / exit `ctrl+0` then `ctrl+x`
+
+**Note:**  
+If you have a machine with 512gb ram then you can modify the following lines to suite your ram levels (example below is for 512gb ram):
+```
+(increase) --accounts-index-memory-limit-mb 350 \
+(remove) --accounts-db-cache-limit-mb 50 \
+```
 
 Make this shell file executable.
 ```
@@ -430,7 +433,7 @@ Healthcheck - you want this to return the work "Ok"
 
 If can also return a 'behind by x number of slots" which means it behind the "tip" of the chain by that many slots. Nodes can sometimes fall a little behind and that's normal. Anything above about 100 behind mean you will risk serving stale data.
 
-It can take half an hour before this healthcheck reports slots. Prior it may just say "connection refused." That's normal, give the RPC time to download the data, index the data, and catch up to the top of the chain.
+It can take half an hour before this healthcheck reports slots. Prior it may just say "connection refused." That's normal, give the RPC time to download the data, index the data, and catch up to the tip of the chain.
 ```
 curl http://localhost:8899 -k -X POST -H "Content-Type: application/json" -d '
   {"jsonrpc":"2.0","id":1, "method":"getHealth"}
