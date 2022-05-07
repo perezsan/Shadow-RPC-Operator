@@ -254,12 +254,13 @@ exec solana-validator \
 ```
 Save / exit `ctrl+0` then `ctrl+x`
 
-**Note:**  
+>**Note:**  
 If you have a machine with 512gb ram then you can modify the following lines to suite your ram levels (example below is for 512gb ram):
 ```
 (increase) --accounts-index-memory-limit-mb 350 \
-(remove) --accounts-db-cache-limit-mb 50 \
 ```
+>**Note:** If you have more than 256gb ram you might also consider running /mt/accounts/solana-accounts on a tmpfs filesystem instead. An exmaple of this is detailed in the validator setup located here - https://github.com/Shadowy-Super-Coder-DAO/Solana-Validator-Setup-Equinix/blob/main/solana-validator-SSP-EQsetup.md  
+
 
 Make this shell file executable.
 ```
