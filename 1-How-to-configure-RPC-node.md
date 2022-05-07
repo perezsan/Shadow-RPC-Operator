@@ -237,8 +237,6 @@ exec solana-validator \
 --rpc-bind-address 0.0.0.0 \
 --enable-cpi-and-log-storage \
 --account-index program-id \
---account-index spl-token-owner \
---account-index spl-token-mint \
 --enable-rpc-transaction-history \
 --no-duplicate-instance-check \
 --wal-recovery-mode skip_any_corrupted_record \
@@ -252,7 +250,6 @@ exec solana-validator \
 --rpc-send-retry-ms 2000 \
 --full-rpc-api \
 --accounts-index-memory-limit-mb 100 \
---accounts-db-cache-limit-mb 50 \
 --account-index-exclude-key kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6 \
 ```
 Save / exit `ctrl+0` then `ctrl+x`
