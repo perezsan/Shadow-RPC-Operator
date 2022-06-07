@@ -177,7 +177,7 @@ Pay attention to yrou grafana dashboard. Know what is normal and what isn't. 40%
 
 
 #
-## What is the deal with all these system optimizations and can I play around with the?
+## What is the deal with all these system optimizations?
 
 **Technical:**   
 Edit system ops in `/etc/sysctl.conf`   

@@ -169,10 +169,10 @@ Dump this entire command block for basic Shadow Node function:
 sudo ufw allow 53;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 8000:8020/udp
 ```
 
-## Install the Solana CLI and don't forget to check for current version (1.9.20 as of 05/05/2022)
+## Install the Solana CLI and don't forget to check for current version (1.10.23 as of 06/06/2022)
 
 ```
-sh -c "$(curl -sSfL https://release.solana.com/v1.9.20/install)"
+sh -c "$(curl -sSfL https://release.solana.com/v1.10.23/install)"
 ```
 
 It will ask you to map the PATH just copy and paste the command below:
@@ -191,7 +191,9 @@ Exit gossip with `ctrl + c`
 
 Now create keys.
 
-RPCs use throw away keys. These keys allow and RPC to be fully functional but do not need funds and do not need to be saved (because you can just make new ones if you need to ). You do not need to set a password for the keys. No need to copy seed phrases. You do not need a wallet-keypair if just RPC. **Do not move SOL into these wallets. This is not a validator**
+RPCs use throw away keys. These keys allow and RPC to be fully functional but do not need funds and do not need to be saved (because you can just make new ones if you need to ). You do not need to set a password for the keys. No need to copy seed phrases. You do not need a wallet-keypair if just RPC.   
+
+**Do not move SOL into these wallets. This is not a validator**
 ```
 solana-keygen new -o ~/validator-keypair.json
 

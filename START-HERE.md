@@ -4,28 +4,27 @@ Shadow Operator resources for running a high performance &amp; high stability Sh
 
 # Overview
 
-Please make sure to review this comprehensive overview of the [Shadow Protocol](https://genesysgo.medium.com/the-comprehensive-guide-to-genesysgo-and-the-shdw-ido-278b90d3186c)
+Please make sure to review this comprehensive overview of the [Shadow Infrastructure Overview](https://shdw.genesysgo.com/shadow-infrastructure-overview/shadow-operators)
 
 This guide is currently intended only for setting up servers from the [Solana Server Program](https://solana.foundation/server-program).
 
-**IMPORTANT:** We are currently in alpha testing of Shadow Node Operators. Please reach out to a team member of GenesysGo to express interest in being an alpha tester. During this short phase of testing, there is no active $SHDW token reward emission (as the IDO has not yet occurred). Additionally, we may often make the request that machines be turned off or removed for adjustments. This is a volunteer alpha phase and we appreciate anyone willing to help contribute their time and resources.
+**IMPORTANT:** We are currently in closed beta testing of Shadow Node Operators. Please reach out to a team member of GenesysGo to express interest in being an beta tester. During this phase of testing, beta operators will receive automated emission payments from the Shadow Smart Contracts covering independent operators. Details are in the "Shadow Infrastructure Overview linked above."
 
-**UPDATE** 03/10 - Alpha testing pool is closed for a short period while we build out both the protocol that oversees the shadow nodes as well as the shadow drive integrations.
+**UPDATE** 06/06 - Alpha testing pool is closed. Closed beta is live with all smart contract operating on mainnet. Open beta is next. 
 
 **HARDWARE CONSIDERATIONS**
-A Solana Shadow Node has similar hardware requirements to the Solana RPC with the addition of additional storage capacity. This will change over time as the Shadow Protocol evolves. These hardware details below are for **early alpha Shadow Nodes and the following beta Shadow Nodes**
+A Solana Shadow Node has similar hardware requirements to the Solana RPC with the added preference of additional storage capacity. This will change over time as the Shadow Protocol evolves.
 
-If you are utilizing the Solana Server Program for your hardware, please make sure you have two larger drives as detailed below:
+If you are utilizing the Solana Server Program for your hardware, please make sure you are provisioning the following at a minimum:
 
 Minimums from Solana Server Program:
-*  CPU - 24 core, 2.8GHZ, AVX2 support (Prefer 3.0GHZ+ native), must boost above 3ghz
-*  RAM - 256GB
-*  HD  x 3
-       - Boot - 200GB SSD
-       - Ledger - 3.8TB NVME
-       - Storage - 3.8TB NVME or SSD
-*  NIC - 10gig
+*  CPU - 24 core, 2.8Ghz, AVX2 support (Prefer 3.0Ghz+ native) - **must sustain boost above 3.0Ghz across all cores**
+*  RAM - 256GB (512GB prefered)
+*  HD  - x2 Boot ~200GB SSD, Storage - 3.8TB NVME, (additional 3.8TB or greater prefered for additional storage)
+*  NIC - 10gig (dual 10gig bonded prefered)
 *  Connection - 1GB/s symmetrical
+
+**IMPORTANT**: Please avoid the 7402p generation 2 AMD processor. It will not be able to handle the workload. This CPU is issued in the EQ2 model from Equinix, but possibly elsewhere within the SSP. If you are looking at generation 2 AMDs, 7502p with 512gig ram are currently able to peform decent. We recommend generation 3 AMDs if possible (such as the AMD 7513 found in higher spec Equinix options). Intel ice-lakes and dual sockets intel that can boost (sustain the boost) over 3Ghz are also performant but are not supported in these docs.
 
 Custom Builders see above minimums or the below general guidance. These are generalizations and subject to change.
 # Operating a Shadow Node
@@ -40,7 +39,7 @@ If you are just getting started, walking through the `1-Configuring a Shadow Nod
 Once you have completed Steps 1-3 you should notify the GenesysGo team and receive the Shadow Operator role in Discord. This grants you access to the Shadow Ops and Shadow health monitoring channels.
 # Rewards for Operating a Shadow Node
 
-Please see this [resource](https://genesysgo.medium.com/the-comprehensive-guide-to-genesysgo-and-the-shdw-ido-278b90d3186c) for how rewards will work:
+Please see this [resource](https://shdw.genesysgo.com/shadow-infrastructure-overview/shadow-operators) for how rewards will work:
 
 # Other Resources & Learning
 
@@ -48,16 +47,3 @@ Official Solana RPC resources to reference are located in the [Solana Documentat
 
 For developers interested in a more automated control we are releasing an advanced Shadow Node operator manual in due time.
 
-For more advanced developers and those interested in deploying their node and scaling their Shadow Node(s) with the ansible automation engine please see [this resource by Triton](https://github.com/rpcpool).
-
-# Credits
-
-Thank you to our alpha test Shadow Operators and advisors for the thoughts and technical contributions.
-
-Thanks to the great group at rpcpool / Triton One for their support in the Solana RPC Discord channel and for providing the broader community their resources.
-
-We also learned very early from agjell (andrebo in Discord) who more focuses on validators but offered a great guide that helped many of the validators you see running today get online. If you are also interested in getting your very own validator up and running check out [his repo](https://github.com/agjell/sol-tutorials).
-
-Finally, thanks to everyone that actively offers help and advice in the Solana Discord and the SSC DAO discord.
-
-Don't hesitate to ask questions or submit feedback to this DAO repository!
