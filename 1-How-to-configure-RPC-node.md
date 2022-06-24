@@ -61,6 +61,8 @@ sudo fdisk -l
 
 sudo mkfs -t ext4 /dev/nvme0n1p1
 
+sudo mkdir /mt
+
 sudo mount /dev/nvme0n1p1 /mt
 
 sudo mkswap /dev/nvme0n1p2
@@ -169,10 +171,11 @@ Dump this entire command block for basic Shadow Node function:
 sudo ufw allow 53;sudo ufw allow 8899/tcp;sudo ufw allow 8900/tcp;sudo ufw allow 8000:8020/udp
 ```
 
-## Install the Solana CLI and don't forget to check for current version (1.10.23 as of 06/06/2022)
+## Install the Solana CLI and don't forget to check for current version (1.10.25 as of 06/23/2022)
 
 ```
-sh -c "$(curl -sSfL https://release.solana.com/v1.10.23/install)"
+sh -c "$(curl -sSfL https://release.solana.com/v1.10.25/install)"
+
 ```
 
 It will ask you to map the PATH just copy and paste the command below:
@@ -254,14 +257,14 @@ exec solana-validator \
 --accounts-index-memory-limit-mb 100 \
 --account-index-exclude-key kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6 \
 ```
-Save / exit `ctrl+0` then `ctrl+x`
+Save / exit `ctrl+0` enter then `ctrl+x`
 
 >**Note:**  
 If you have a machine with 512gb ram then you can modify the following lines to suite your ram levels (example below is for 512gb ram):
 ```
 (increase) --accounts-index-memory-limit-mb 350 \
 ```
->**Note:** If you have more than 256gb ram you might also consider running /mt/accounts/solana-accounts on a tmpfs filesystem instead. An exmaple of this is detailed in the validator setup located here - https://github.com/Shadowy-Super-Coder-DAO/Solana-Validator-Setup-Equinix/blob/main/solana-validator-SSP-EQsetup.md  
+>**Note:** If you have more than 256gb ram you might also consider running /mt/accounts/solana-accounts on a tmpfs filesystem instead. An example of this is detailed in the validator setup located here - https://github.com/Shadowy-Super-Coder-DAO/Solana-Validator-Setup-Equinix/blob/main/solana-validator-SSP-EQsetup.md  
 
 
 Make this shell file executable.
@@ -298,7 +301,7 @@ ExecStart=/home/sol/start-validator.sh
 [Install]
 WantedBy=multi-user.target
 ```
-Save / exit `ctrl+0` then `ctrl+x`
+Save / exit `ctrl+0` enter then `ctrl+x`
 
 Make system tuner service - systuner.service
 ```
